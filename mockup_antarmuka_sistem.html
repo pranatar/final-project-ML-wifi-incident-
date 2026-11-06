@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Mockup - Sistem Manajemen Insiden Wi-Fi Kampus</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js">    window.addEventListener("DOMContentLoaded", checkApiConnection);
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @media print {
+      body * { visibility: hidden; }
+      #screen-certificate, #screen-certificate * { visibility: visible; }
+      #screen-certificate { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+      .no-print { display: none !important; }
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+
+  <!-- TOP APP NAVIGATION BAR (NO-PRINT) -->
+  <header class="no-print bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-sm">
+          <i class="fa-solid fa-wifi text-base"></i>
+        </div>
+        <div>
+          <h1 class="text-base font-bold tracking-tight">Sistem Resolusi Wi-Fi Tugas Daring (UPT TIK)</h1>
+          <p class="text-xs text-slate-400">Prototipe UI Terpadu: Mahasiswa, NOC, & Surat Bukti Akademik</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+        <button onclick="switchScreen('student')" id="tab-student" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2">
+          <i class="fa-solid fa-mobile-screen"></i> 1. Portal Mahasiswa (Mobile)
+        </button>
+        <button onclick="switchScreen('noc')" id="tab-noc" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+          <i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC & Helpdesk
+        </button>
+        <button onclick="switchScreen('certificate')" id="tab-certificate" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+          <i class="fa-solid fa-file-contract"></i> 3. Surat Bukti Resmi (PDF)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: PORTAL MAHASISWA (MOBILE MOCKUP) -->
+    <!-- ========================================== -->
+    <section id="screen-student" class="space-y-6">
+      <div class="text-center max-w-xl mx-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+          Tampilan Antarmuka Pengguna (End-User)
+        </span>
+        <h2 class="text-2xl font-bold text-slate-900 mt-2">Portal Pelaporan Darurat Wi-Fi</h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Dirancang responsif dan ultra-ringan agar tetap bisa dibuka mahasiswa meski sinyal sangat lemah.
+        </p>
+      </div>
+
+      <!-- Phone Frame Container -->
+      <div class="max-w-sm mx-auto bg-white rounded-3xl border-8 border-slate-800 shadow-2xl overflow-hidden">
+        <!-- Phone Top Notch -->
+        <div class="bg-slate-800 px-6 py-2 flex justify-between items-center text-white text-[11px]">
+          <span>09:41</span>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal"></i>
+            <span class="text-rose-400 font-bold">! E</span>
+            <i class="fa-solid fa-battery-three-quarters"></i>
+          </div>
+        </div>
+
+        <!-- Phone Header -->
+        <div class="bg-blue-600 p-4 text-white">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-blue-200">Helpdesk Darurat</span>
+              <h3 class="text-base font-bold">Lapor Gangguan Ujian/Tugas</h3>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-rose-500 text-[10px] font-bold uppercase tracking-wider animate-pulse">
+              Live S.O.S
+            </span>
+          </div>
+          <p class="text-xs text-blue-100 mt-1">Koneksi putus saat submit tugas? Lapor dalam 3 klik.</p>
+        </div>
+
+        <!-- Phone Content Area -->
+        <div class="p-4 space-y-4 max-h-[550px] overflow-y-auto custom-scroll">
+
+          <!-- State A: Form Submission -->
+          <div id="student-form-state" class="space-y-3.5">
+            <!-- Alert Peringatan Tugas -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2.5 items-start">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500 text-sm mt-0.5"></i>
+              <div class="text-xs text-amber-900 leading-relaxed">
+                <b>Tips Cepat:</b> Screenshot layar error tugas Anda sekarang sebagai bukti kendala jika waktu submit habis.
+              </div>
+            </div>
+
+            <!-- Input NIM & Nama -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Identitas Mahasiswa</label>
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="stu-nim" value="230401089" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-slate-50 font-mono focus:ring-2 focus:ring-blue-500 outline-none" placeholder="NIM">
+                <input type="text" id="stu-name" value="Budi Pratama" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama">
+              </div>
+            </div>
+
+            <!-- Dropdown Lokasi Kejadian -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Kejadian (Wajib)</label>
+              <div class="space-y-1.5">
+                <select id="stu-building" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                  <option selected>Gedung B (Fakultas Teknik)</option>
+                  <option>Gedung A (Rektorat)</option>
+                  <option>Gedung C (Perpustakaan Pusat)</option>
+                </select>
+                <div class="grid grid-cols-2 gap-2">
+                  <select id="stu-floor" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                    <option selected>Lantai 2</option>
+                    <option>Lantai 1</option>
+                    <option>Lantai 3</option>
+                  </select>
+                  <select id="stu-room" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700">
+                    <option selected>Lab Komputer 3</option>
+                    <option>Ruang Kelas 201</option>
+                    <option>Ruang Kelas 202</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Jenis Gejala -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Gejala Gangguan</label>
+              <select id="stu-symptom" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <option selected>Koneksi Terputus saat Submit Tugas di LMS</option>
+                <option>Sinyal Wi-Fi Hilang Tiba-tiba</option>
+                <option>Stuck "Obtaining IP Address" (Gagal Login)</option>
+                <option>Sesi Captive Portal Habis / Tidak Bisa Login SSO</option>
+              </select>
+            </div>
+
+            <!-- Upload Bukti -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Bukti Screenshot Layar Tugas</label>
+              <div class="border-2 border-dashed border-slate-300 rounded-xl p-3 text-center bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-up text-blue-500 text-lg"></i>
+                <div class="text-[11px] text-slate-600 font-medium mt-1">error_submit_kuis_lms.png</div>
+                <div class="text-[9px] text-slate-400">File terpilih (1.2 MB)</div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button onclick="simulateStudentSubmit()" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Kirim Laporan Darurat Sekarang
+            </button>
+          </div>
+
+          <!-- State B: Live Ticket Tracker (Hidden by default, shown on submit) -->
+          <div id="student-tracker-state" class="hidden space-y-4">
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-center">
+              <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Nomor Tiket Aduan</span>
+              <h4 id="stu-tracker-ticket-id" class="text-base font-extrabold text-blue-900 font-mono">#TKT-WIFI-202611-0042</h4>
+              <p id="stu-tracker-location" class="text-[11px] text-blue-700 mt-0.5">Lokasi: Gedung B - Lab Komputer 3</p>
+            </div>
+
+            <!-- Stepper Progress Tracker -->
+            <div class="space-y-3 pl-2">
+              <div class="flex items-start gap-3 relative">
+                <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</div>
+                <div class="border-l-2 border-emerald-500 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Laporan Diterima Sistem</h5>
+                  <p class="text-[10px] text-slate-500">Pukul 09:41 WIB • Auto-Cluster mendeteksi 4 laporan serupa</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 relative">
+                <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</div>
+                <div class="border-l-2 border-amber-400 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Triase Helpdesk (L1)</h5>
+                  <p class="text-[10px] text-slate-500">Pukul 09:42 WIB • Status dinaikkan ke: <b>P1 CRITICAL</b></p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3 relative">
+                <div class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 animate-pulse">⚡</div>
+                <div class="border-l-2 border-slate-200 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 class="text-xs font-bold text-amber-700">Penanganan Teknisi Jaringan (NOC)</h5>
+                  <p class="text-[10px] text-slate-500">Sedang dilakukan: Load balancing AP & pelepasan IP DHCP</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-3">
+                <div class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">4</div>
+                <div>
+                  <h5 class="text-xs font-bold text-slate-400">Verifikasi & Pemulihan</h5>
+                  <p class="text-[10px] text-slate-400">Menunggu uji coba koneksi dari mahasiswa</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons for Student -->
+            <div class="space-y-2 pt-2 border-t border-slate-100">
+              <button onclick="switchScreen('certificate')" class="w-full py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-file-pdf"></i> Unduh Surat Bukti Gangguan (Untuk Dosen)
+              </button>
+              <button onclick="resetStudentForm()" class="w-full py-1.5 text-slate-500 hover:text-slate-700 text-[11px] font-semibold text-center">
+                ← Buat Laporan Baru Lainnya
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Phone Footer Navigation -->
+        <div class="bg-slate-50 border-t border-slate-200 p-2 text-center text-[10px] text-slate-400">
+          Layanan Cepat UPT TIK Kampus • Bantuan: 0812-XXXX-XXXX
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: DASHBOARD MONITORING NOC & HELPDESK -->
+    <!-- ========================================== -->
+    <section id="screen-noc" class="hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">
+            Tier 1 & Tier 2 Control Center
+          </span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-1">Network Operations Center (NOC) Dashboard</h2>
+          <p class="text-sm text-slate-500">Monitoring telemetri Access Point, korelasi tiket darurat, dan eksekusi remediasi.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live Telemetry Connected
+          </span>
+        </div>
+      </div>
+
+      <!-- Metric Highlights Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Access Point Aktif</p>
+              <h3 class="text-2xl font-black text-slate-900 mt-1">64 / 65</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+          </div>
+          <p class="text-xs text-amber-600 mt-2 font-medium">⚠️ 1 Unit AP Overload di Gedung B</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Klien Terhubung</p>
+              <h3 class="text-2xl font-black text-slate-900 mt-1">1,428</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">68% di pita 5 GHz • 32% di 2.4 GHz</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-rose-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">DHCP Pool Mahasiswa</p>
+              <h3 class="text-2xl font-black text-rose-600 mt-1">94% Penuh</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-server"></i>
+            </div>
+          </div>
+          <p class="text-xs text-rose-600 mt-2 font-medium">🚨 Tersisa 32 IP di Subnet Gedung B</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-amber-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiket Ujian/Tugas (P1)</p>
+              <h3 class="text-2xl font-black text-amber-600 mt-1">4 Laporan</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-bell"></i>
+            </div>
+          </div>
+          <p class="text-xs text-amber-700 mt-2 font-bold">Auto-Clustered: Lab Komputer 3</p>
+        </div>
+      </div>
+
+      <!-- Alert Insiden Massal Aktif -->
+      <div class="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl shrink-0 mt-0.5">
+            <i class="fa-solid fa-triangle-exclamation animate-bounce"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase">P1 URGENT - KORELASI MASSAL</span>
+              <span class="text-xs font-semibold text-slate-500">Stempel Waktu: 09:41 WIB</span>
+            </div>
+            <h4 class="text-base font-bold text-slate-900 mt-0.5">Terdeteksi Gangguan Wi-Fi di Gedung B - Lantai 2 (Lab Komputer 3)</h4>
+            <p class="text-xs text-slate-600">
+              4 mahasiswa mengajukan keluhan gagal submit tugas secara bersamaan. AP-GedB-L2-03 beroperasi pada utilisasi CPU 92% dan melayani 65 klien simultan.
+            </p>
+          </div>
+        </div>
+        <button onclick="executeQuickRemediation()" id="btn-remediation" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Eksekusi Auto-Remediasi AP
+        </button>
+      </div>
+
+      <!-- Main Layout: Heatmap Grid & Incident Queue -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Floor Heatmap Status (2 Cols) -->
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Peta Utilisasi Access Point (Gedung B - Lantai 2)</h3>
+              <p class="text-xs text-slate-400">Visualisasi kepadatan perangkat dan status kesehatan AP per ruangan</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Normal (&lt;35 user)</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Sibuk (&gt;35 user)</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Overload (&gt;50 user)</span>
+            </div>
+          </div>
+
+          <!-- Heatmap Room Boxes -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+            <!-- Room 201 -->
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:border-slate-300 transition">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-slate-700">Ruang Kelas 201</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">AP-GedB-L2-01 (Cisco 9120)</p>
+              <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-lg font-bold text-slate-800">18 Klien</span>
+                <span class="text-[11px] text-emerald-600 font-semibold">Channel 1 (Clean)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 36%"></div>
+              </div>
+            </div>
+
+            <!-- Room 202 -->
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 hover:border-slate-300 transition">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-slate-700">Ruang Kelas 202</span>
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">AP-GedB-L2-02 (Cisco 9120)</p>
+              <div class="mt-3 flex items-baseline justify-between">
+                <span class="text-lg font-bold text-slate-800">22 Klien</span>
+                <span class="text-[11px] text-emerald-600 font-semibold">Channel 6 (Clean)</span>
+              </div>
+              <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 44%"></div>
+              </div>
+            </div>
+
+            <!-- Lab Komputer 3 (CRITICAL) -->
+            <div id="ap-critical-box" class="p-4 rounded-xl border-2 border-rose-500 bg-rose-50/50 shadow-sm transition">
+              <div class="flex justify-between items-start">
+                <span class="text-xs font-bold text-rose-900">Lab Komputer 3 (Ujian)</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[9px] font-black uppercase">CRITICAL</span>
+              </div>
+              <p class="text-[11px] text-rose-600 mt-1 font-mono">AP-GedB-L2-03 (Overload)</p>
+              <div class="mt-3 flex items-baseline justify-between">
+                <span id="ap-client-count" class="text-lg font-black text-rose-700">65 Klien</span>
+                <span id="ap-latency" class="text-[11px] text-rose-600 font-bold">Loss: 14% • 180ms</span>
+              </div>
+              <div class="w-full bg-rose-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                <div id="ap-bar" class="bg-rose-600 h-1.5 rounded-full" style="width: 95%"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Tools Panel -->
+          <div class="border-t border-slate-100 pt-4">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">Panel Perintah Cepat Teknisi (WLC & DHCP)</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button onclick="simulateToast('Band Steering Aktif: 24 perangkat dipaksa pindah ke 5 GHz.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-blue-600 font-bold text-xs"><i class="fa-solid fa-arrows-split-up-and-left mr-1"></i> Band Steering</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Arahkan user ke 5GHz</div>
+              </button>
+              <button onclick="simulateToast('DHCP Flush Berhasil: 48 IP kadaluarsa berhasil dirilis.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-purple-600 font-bold text-xs"><i class="fa-solid fa-rotate mr-1"></i> Flush Lease IP</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Lepas IP stale &lt; 2 jam</div>
+              </button>
+              <button onclick="simulateToast('QoS Applied: Bandwidth non-akademik ditekan, LMS diprioritaskan.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-amber-600 font-bold text-xs"><i class="fa-solid fa-filter mr-1"></i> Prioritas LMS (QoS)</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Limit streaming & P2P</div>
+              </button>
+              <button onclick="simulateToast('Radio Re-tuned: Kanal dipindah ke Ch 11 non-overlapping.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-emerald-600 font-bold text-xs"><i class="fa-solid fa-sliders mr-1"></i> RF Auto Tuning</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Optimalkan channel radio</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Clustered Ticket Queue (1 Col) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3.5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Antrean Tiket Masuk</h3>
+              <p class="text-xs text-slate-400">Penyortiran otomatis berbasis urgensi</p>
+            </div>
+            <span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">4 Tiket</span>
+          </div>
+
+          <div id="noc-tickets-container" class="space-y-2.5 max-h-[380px] overflow-y-auto custom-scroll pr-1">
+            <!-- Ticket 1 -->
+            <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/60 hover:bg-amber-50 transition cursor-pointer">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono font-bold text-amber-900">#TKT-WIFI-0042</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[9px] font-bold">P1 URGENT</span>
+              </div>
+              <p class="text-xs font-bold text-slate-800 mt-1">Budi Pratama (NIM 230401089)</p>
+              <p class="text-[11px] text-slate-500">Gedung B - Lab Komputer 3 • Gagal Submit Tugas</p>
+            </div>
+
+            <!-- Ticket 2 -->
+            <div class="p-3 rounded-xl border border-amber-200 bg-amber-50/60 hover:bg-amber-50 transition cursor-pointer">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono font-bold text-amber-900">#TKT-WIFI-0043</span>
+                <span class="px-1.5 py-0.5 rounded bg-rose-600 text-white text-[9px] font-bold">P1 URGENT</span>
+              </div>
+              <p class="text-xs font-bold text-slate-800 mt-1">Siti Rahma (NIM 230401044)</p>
+              <p class="text-[11px] text-slate-500">Gedung B - Lab Komputer 3 • Wi-Fi Terputus</p>
+            </div>
+
+            <!-- Ticket 3 -->
+            <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+              <div class="flex justify-between items-start">
+                <span class="text-[11px] font-mono font-bold text-slate-700">#TKT-WIFI-0040</span>
+                <span class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 text-[9px] font-bold">P3 NORMAL</span>
+              </div>
+              <p class="text-xs font-bold text-slate-800 mt-1">Ahmad Fauzi (NIM 220201011)</p>
+              <p class="text-[11px] text-slate-500">Gedung A - Ruang 102 • Lupa Password SSO</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: SURAT BUKTI GANGGUAN RESMI (PDF) -->
+    <!-- ========================================== -->
+    <section id="screen-certificate" class="hidden">
+      <!-- Action Toolbar (Hidden in Print) -->
+      <div class="no-print max-w-3xl mx-auto mb-4 flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+        <div>
+          <span class="text-xs font-bold text-slate-700">Dokumen Digital Resmi UPT TIK</span>
+          <p class="text-[11px] text-slate-400">Bukti keabsahan kendala jaringan untuk Dosen Pengampu Tugas</p>
+        </div>
+        <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+        </button>
+      </div>
+
+      <!-- Formal Letter Paper (A4 Style) -->
+      <div class="max-w-3xl mx-auto bg-white border border-slate-300 rounded-xl p-8 sm:p-12 shadow-lg space-y-6 text-slate-900">
+        
+        <!-- Kop Surat Resmi Kampus -->
+        <div class="border-b-4 border-double border-slate-900 pb-4 text-center space-y-1">
+          <h4 class="text-xs uppercase tracking-widest font-bold text-slate-700">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</h4>
+          <h2 class="text-lg sm:text-xl font-black tracking-wide text-slate-950 uppercase">UNIVERSITAS TEKNOLOGI KAMPUS MERDEKA</h2>
+          <h3 class="text-xs font-bold text-blue-900 uppercase tracking-wider">UNIT PELAKSANA TEKNIS TEKNOLOGI INFORMASI DAN KOMUNIKASI (UPT TIK)</h3>
+          <p class="text-[10px] text-slate-500">Gedung Rektorat Lt. 2, Kampus Terpadu • Email: helpdesk.tik@kampus.ac.id • Web: tik.kampus.ac.id</p>
+        </div>
+
+        <!-- Judul & Nomor Surat -->
+        <div class="text-center space-y-1 pt-2">
+          <h3 class="text-sm font-extrabold tracking-wider underline uppercase">SURAT KETERANGAN GANGGUAN TEKNIS JARINGAN WI-FI</h3>
+          <p class="text-xs font-mono text-slate-600">Nomor: 421.3/UPT-TIK/SK-GANGGUAN/XI/2026</p>
+        </div>
+
+        <!-- Isi Pengantar -->
+        <div class="text-xs leading-relaxed text-justify space-y-2">
+          <p>
+            Dengan ini, Kepala Unit Pelaksana Teknis Teknologi Informasi dan Komunikasi (UPT TIK) menerangkan secara resmi bahwa berdasarkan catatan telemetri sistem pemantauan nirkabel dan log tiket helpdesk:
+          </p>
+        </div>
+
+        <!-- Tabel Rincian Mahasiswa & Insiden -->
+        <table class="w-full text-xs border border-slate-300 rounded-lg overflow-hidden">
+          <tbody>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold w-1/3 text-slate-700">Nama Mahasiswa</td>
+              <td class="p-2.5 font-semibold text-slate-900">Budi Pratama</td>
+            </tr>
+            <tr class="border-b border-slate-200">
+              <td class="p-2.5 font-bold text-slate-700">Nomor Induk Mahasiswa (NIM)</td>
+              <td class="p-2.5 font-mono text-slate-900">230401089</td>
+            </tr>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold text-slate-700">Lokasi Kejadian</td>
+              <td class="p-2.5 text-slate-900">Gedung B (Fakultas Teknik) - Lantai 2, Lab Komputer 3</td>
+            </tr>
+            <tr class="border-b border-slate-200">
+              <td class="p-2.5 font-bold text-slate-700">Nomor Tiket Terverifikasi</td>
+              <td class="p-2.5 font-mono font-bold text-blue-800">#TKT-WIFI-202611-0042 (Status: Resolved)</td>
+            </tr>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold text-slate-700">Waktu Terjadinya Gangguan</td>
+              <td class="p-2.5 text-slate-900">03 November 2026, Pukul 09:38 WIB s/d 09:55 WIB (Durasi: 17 Menit)</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 font-bold text-slate-700">Akar Masalah (RCA)</td>
+              <td class="p-2.5 text-slate-800">Access Point Overload (&gt;65 klien aktif) & Kehabisan Pool Alamat IP DHCP pada VLAN Mahasiswa saat sesi ujian daring serentak.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Rekomendasi Dispensasi Akademik -->
+        <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-xs text-slate-800 space-y-1">
+          <p class="font-bold text-blue-900">Rekomendasi Akademik kepada Dosen Pengampu:</p>
+          <p class="leading-relaxed">
+            Sehubungan dengan insiden kegagalan transmisi data di atas yang berada di luar kendali mahasiswa bersangkutan, UPT TIK merekomendasikan pemberian <b>dispensasi perpanjangan waktu pengumpulan</b> atau pembukaan kembali slot tugas daring di LMS selama <b>minimal 30 menit</b> sejak surat ini diterbitkan.
+          </p>
+        </div>
+
+        <!-- Tanda Tangan & QR Code Validasi -->
+        <div class="pt-6 flex justify-between items-end">
+          <!-- QR Code Validation -->
+          <div class="space-y-1 text-center">
+            <div class="w-24 h-24 border border-slate-300 p-1.5 rounded-lg bg-white shadow-sm flex items-center justify-center">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=VALID_TIK_TKT-WIFI-0042_BUDI_PRATAMA" alt="QR Code" class="w-full h-full">
+            </div>
+            <p class="text-[9px] font-mono text-slate-400">Scan Verifikasi Keaslian</p>
+          </div>
+
+          <!-- Official Signature Box -->
+          <div class="text-center space-y-1 text-xs">
+            <p class="text-slate-600">Dikeluarkan di: Kampus Terpadu</p>
+            <p class="text-slate-600">Pada tanggal: 03 November 2026</p>
+            <p class="font-bold text-slate-800 mt-2">Kepala UPT TIK,</p>
+            <div class="py-4 text-blue-900 font-serif italic text-sm font-bold opacity-80">
+              [Tanda Tangan Digital Tersertifikasi]
+            </div>
+            <p class="font-bold underline text-slate-900">Ir. H. Hendra Wijaya, M.T., CCNA</p>
+            <p class="text-[10px] text-slate-500 font-mono">NIP. 19780415 200501 1 002</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Interactive JavaScript logic -->
+  <script>
+    function switchScreen(screen) {
+      document.getElementById('screen-student').classList.add('hidden');
+      document.getElementById('screen-noc').classList.add('hidden');
+      document.getElementById('screen-certificate').classList.add('hidden');
+
+      document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+
+      if (screen === 'student') {
+        document.getElementById('screen-student').classList.remove('hidden');
+        document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+      } else if (screen === 'noc') {
+        document.getElementById('screen-noc').classList.remove('hidden');
+        document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+      } else if (screen === 'certificate') {
+        document.getElementById('screen-certificate').classList.remove('hidden');
+        document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+      }
+    }
+
+    const API_BASE = window.location.protocol.startsWith('http') ? '' : 'http://localhost:3000';
+    let isApiConnected = false;
+
+    async function checkApiConnection() {
+      try {
+        const res = await fetch(`${API_BASE}/api/health`);
+        if (res.ok) {
+          isApiConnected = true;
+          console.log('[API] Terhubung ke Backend REST API!');
+          loadNocData();
+        }
+      } catch (e) {
+        console.log('[API] Mode prototipe offline/standalone.');
+      }
+    }
+
+    async function loadNocData() {
+      try {
+        const res = await fetch(`${API_BASE}/api/tickets`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          renderNocTickets(json.data);
+        }
+      } catch (err) {
+        console.warn('Gagal memuat tiket dari API:', err);
+      }
+    }
+
+    function renderNocTickets(tickets) {
+      const container = document.getElementById('noc-tickets-container');
+      if (!container || !tickets.length) return;
+      container.innerHTML = '';
+      tickets.forEach(t => {
+        const isCritical = t.prioritas === 'P1-CRITICAL';
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl border ${isCritical ? 'border-amber-200 bg-amber-50/60 hover:bg-amber-50' : 'border-slate-200 bg-slate-50 hover:bg-slate-100'} transition cursor-pointer`;
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <span class="text-[11px] font-mono font-bold ${isCritical ? 'text-amber-900' : 'text-slate-700'}">#${t.no_tiket}</span>
+            <span class="px-1.5 py-0.5 rounded ${isCritical ? 'bg-rose-600 text-white' : 'bg-slate-200 text-slate-700'} text-[9px] font-bold">${t.prioritas}</span>
+          </div>
+          <p class="text-xs font-bold text-slate-800 mt-1">${t.nama_pelapor || 'Mahasiswa'} (NIM ${t.user_id})</p>
+          <p class="text-[11px] text-slate-500">${t.nama_ruangan || t.id_ruangan} • ${t.gejala_gangguan}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function simulateStudentSubmit() {
+      const nim = document.getElementById('stu-nim')?.value || '230401089';
+      const name = document.getElementById('stu-name')?.value || 'Budi Pratama';
+      const room = document.getElementById('stu-room')?.value || 'Lab Komputer 3';
+      const symptom = document.getElementById('stu-symptom')?.value || 'Koneksi Terputus saat Submit Tugas di LMS';
+
+      let ticketNo = '#TKT-WIFI-202611-0042';
+
+      if (isApiConnected) {
+        try {
+          const payload = {
+            userId: nim,
+            namaPelapor: name,
+            idRuangan: 'GD-B-LT2-LAB03',
+            mataKuliah: 'Jaringan Komputer Lanjut',
+            dosenPengampu: 'Dr. Eng. Wahyu Pratama, M.Kom.',
+            gejalaGangguan: symptom,
+            isEmergencyDeadline: true
+          };
+          const res = await fetch(`${API_BASE}/api/tickets`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            ticketNo = '#' + json.data.no_tiket;
+            simulateToast(json.message);
+            loadNocData();
+          }
+        } catch (e) {
+          console.warn('Gagal POST tiket:', e);
+        }
+      }
+
+      const idEl = document.getElementById('stu-tracker-ticket-id');
+      if (idEl) idEl.innerText = ticketNo;
+
+      const locEl = document.getElementById('stu-tracker-location');
+      if (locEl) locEl.innerText = `Lokasi: Gedung B - ${room}`;
+
+      document.getElementById('student-form-state').classList.add('hidden');
+      document.getElementById('student-tracker-state').classList.remove('hidden');
+    }
+
+    function resetStudentForm() {
+      document.getElementById('student-tracker-state').classList.add('hidden');
+      document.getElementById('student-form-state').classList.remove('hidden');
+    }
+
+    function executeQuickRemediation() {
+      const btn = document.getElementById('btn-remediation');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengoptimasi Jaringan...';
+      btn.className = 'px-5 py-2.5 rounded-xl bg-amber-500 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0';
+
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Remediasi Berhasil (Sinyal Normal)';
+        btn.className = 'px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0';
+
+        const apBox = document.getElementById('ap-critical-box');
+        apBox.className = 'p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/50 shadow-sm transition';
+        document.getElementById('ap-client-count').innerText = '28 Klien (Tereduksi)';
+        document.getElementById('ap-client-count').className = 'text-lg font-black text-emerald-700';
+        document.getElementById('ap-latency').innerText = 'Loss: 0% • 11ms';
+        document.getElementById('ap-latency').className = 'text-[11px] text-emerald-600 font-bold';
+        document.getElementById('ap-bar').className = 'bg-emerald-500 h-1.5 rounded-full';
+        document.getElementById('ap-bar').style.width = '42%';
+
+        simulateToast('Sukses! Load balancing aktif: 37 klien berhasil dipindah ke AP-Koridor. Sinyal stabil.');
+      }, 1200);
+    }
+
+    function simulateToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2.5 border border-slate-700 transition transform duration-300';
+      toast.innerHTML = `<i class="fa-solid fa-bell text-amber-400"></i> ${msg}`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 400);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "projectp-ml-incident-system",
+  "version": "1.0.0",
+  "description": "Sistem Resolusi & Manajemen Insiden Wi-Fi Tugas Daring Kampus Berbasis ITSM/ITIL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node database/init_db.js",
+    "test": "node tests/test_api.js"
+  },
+  "keywords": [
+    "itsm",
+    "itil",
+    "wifi-incident-management",
+    "network-remediation",
+    "campus-noc",
+    "sqlite"
+  ],
+  "author": "UPT TIK Kampus",
+  "license": "MIT"
+}

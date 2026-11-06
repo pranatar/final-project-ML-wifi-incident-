@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistem Resolusi Insiden Wi-Fi Kampus - UPT TIK (Full-Stack Live)</title>
+  <!-- Tailwind CSS & FontAwesome CDN -->
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @media print {
+      body * { visibility: hidden; }
+      #screen-certificate, #screen-certificate * { visibility: visible; }
+      #screen-certificate { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+      .no-print { display: none !important; }
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+
+  <!-- TOP APP NAVIGATION BAR (NO-PRINT) -->
+  <header class="no-print bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center font-bold text-white shadow-sm">
+          <i class="fa-solid fa-wifi text-base"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base font-bold tracking-tight">Sistem Resolusi Wi-Fi Tugas Daring (UPT TIK)</h1>
+            <span id="backend-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Menghubungkan...
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">Aplikasi Terpadu: Mahasiswa SOS, NOC Monitoring, & Surat Dispensasi Resmi</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <nav class="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+        <button onclick="switchScreen('student')" id="tab-student" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2">
+          <i class="fa-solid fa-mobile-screen"></i> 1. Portal Mahasiswa
+        </button>
+        <button onclick="switchScreen('noc')" id="tab-noc" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+          <i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC
+        </button>
+        <button onclick="switchScreen('certificate')" id="tab-certificate" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+          <i class="fa-solid fa-file-contract"></i> 3. Surat Bukti Resmi (PDF)
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: PORTAL MAHASISWA (MOBILE MOCKUP) -->
+    <!-- ========================================== -->
+    <section id="screen-student" class="space-y-6">
+      <div class="text-center max-w-xl mx-auto">
+        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
+          Tampilan Antarmuka Mahasiswa (End-User)
+        </span>
+        <h2 class="text-2xl font-bold text-slate-900 mt-2">Portal Pelaporan Darurat Wi-Fi</h2>
+        <p class="text-sm text-slate-500 mt-1">
+          Formulir pelaporan gangguan saat mengerjakan tugas daring berbatas waktu. Terhubung ke sistem korelasi otomatis.
+        </p>
+      </div>
+
+      <!-- Phone Frame Container -->
+      <div class="max-w-md mx-auto bg-white rounded-3xl border-8 border-slate-800 shadow-2xl overflow-hidden">
+        <!-- Phone Top Notch -->
+        <div class="bg-slate-800 px-6 py-2 flex justify-between items-center text-white text-[11px]">
+          <span id="phone-clock">09:41</span>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal"></i>
+            <span class="text-rose-400 font-bold">! E</span>
+            <i class="fa-solid fa-battery-three-quarters"></i>
+          </div>
+        </div>
+
+        <!-- Phone Header -->
+        <div class="bg-blue-600 p-4 text-white">
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="text-[10px] uppercase font-bold tracking-wider text-blue-200">Helpdesk Darurat</span>
+              <h3 class="text-base font-bold">Lapor Gangguan Ujian/Tugas</h3>
+            </div>
+            <span class="px-2 py-0.5 rounded bg-rose-500 text-[10px] font-bold uppercase tracking-wider animate-pulse">
+              Live S.O.S
+            </span>
+          </div>
+          <p class="text-xs text-blue-100 mt-1">Koneksi putus saat submit tugas? Lapor dalam 3 klik.</p>
+        </div>
+
+        <!-- Phone Content Area -->
+        <div class="p-4 space-y-4 max-h-[580px] overflow-y-auto custom-scroll">
+
+          <!-- State A: Form Submission -->
+          <div id="student-form-state" class="space-y-3.5">
+            <!-- Alert Peringatan Tugas -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2.5 items-start">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500 text-sm mt-0.5"></i>
+              <div class="text-xs text-amber-900 leading-relaxed">
+                <b>Tips Cepat:</b> Segera screenshot layar error tugas Anda sebagai bukti sah jika batas waktu submit habis.
+              </div>
+            </div>
+
+            <!-- Input Identitas Mahasiswa -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Identitas Mahasiswa</label>
+              <div class="grid grid-cols-2 gap-2">
+                <input type="text" id="stu-nim" value="220101089" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none" placeholder="NIM Mahasiswa">
+                <input type="text" id="stu-name" value="Ahmad Fauzi" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Lengkap">
+              </div>
+            </div>
+
+            <!-- Dropdown Lokasi Ruangan (Dinamis dari Database) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Ruangan Terkait (Wajib)</label>
+              <select id="stu-room-select" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-bold text-blue-700 focus:ring-2 focus:ring-blue-500 outline-none">
+                <option value="GD-B-LT2-LAB03" selected>Gedung B - Lantai 2 (Lab Komputer 3)</option>
+                <option value="GD-B-LT2-LAB01">Gedung B - Lantai 2 (Lab Komputer 1)</option>
+                <option value="GD-A-LT1-R101">Gedung A - Lantai 1 (Ruang Kuliah 101)</option>
+                <option value="GD-C-LT3-LAB02">Gedung C - Lantai 3 (Lab Jaringan & IoT)</option>
+                <option value="GD-LIB-LT1-MAIN">Perpustakaan Pusat - Lantai 1</option>
+              </select>
+            </div>
+
+            <!-- Mata Kuliah & Dosen -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Mata Kuliah & Dosen Pengampu</label>
+              <div class="space-y-1.5">
+                <input type="text" id="stu-course" value="Jaringan Komputer Lanjut" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Mata Kuliah">
+                <input type="text" id="stu-lecturer" value="Dr. Eng. Wahyu Pratama, M.Kom." class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Dosen">
+              </div>
+            </div>
+
+            <!-- Gejala Gangguan -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Gejala Gangguan</label>
+              <select id="stu-symptom" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none">
+                <option selected>Koneksi Terputus saat Submit Tugas di LMS</option>
+                <option>Sinyal Wi-Fi Hilang Tiba-tiba</option>
+                <option>Stuck "Obtaining IP Address" (Gagal Alokasi DHCP)</option>
+                <option>Sesi Captive Portal Habis / Tidak Bisa Login SSO</option>
+                <option>Latensi Sangat Tinggi (&gt; 200ms) Packet Drop</option>
+              </select>
+            </div>
+
+            <!-- Upload Bukti Screenshot (Nyata dengan Preview) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Bukti Tangkapan Layar (Screenshot)</label>
+              <div onclick="document.getElementById('stu-file-input').click()" class="border-2 border-dashed border-slate-300 rounded-xl p-3 text-center bg-slate-50 hover:bg-slate-100 transition cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-up text-blue-500 text-lg"></i>
+                <div id="stu-file-name" class="text-[11px] text-slate-600 font-medium mt-1">Klik untuk pilih berkas screenshot error tugas</div>
+                <div class="text-[9px] text-slate-400">PNG, JPG atau PDF (Maks. 5 MB)</div>
+                <input type="file" id="stu-file-input" accept="image/*" class="hidden" onchange="handleFileSelect(this)">
+              </div>
+              <div id="stu-file-preview-box" class="hidden mt-2 text-center">
+                <img id="stu-file-preview" src="" alt="Bukti" class="max-h-24 mx-auto rounded border border-slate-200 shadow-sm">
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button onclick="submitStudentTicket()" id="btn-submit-ticket" class="w-full py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Kirim Laporan Darurat Sekarang
+            </button>
+          </div>
+
+          <!-- State B: Live Ticket Tracker (Dinamis) -->
+          <div id="student-tracker-state" class="hidden space-y-4">
+            <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-center">
+              <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Nomor Tiket Aduan</span>
+              <h4 id="tracker-ticket-id" class="text-base font-extrabold text-blue-900 font-mono">#TKT-202611-0042</h4>
+              <p id="tracker-location-text" class="text-[11px] text-blue-700 mt-0.5">Lokasi: Gedung B - Lab Komputer 3</p>
+              <span id="tracker-priority-badge" class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-600 text-white uppercase">
+                P1-CRITICAL
+              </span>
+            </div>
+
+            <!-- Stepper Progress Tracker Dinamis -->
+            <div class="space-y-3 pl-2">
+              <!-- Step 1 -->
+              <div class="flex items-start gap-3 relative">
+                <div id="step-1-icon" class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</div>
+                <div class="border-l-2 border-emerald-500 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Laporan Diterima Sistem</h5>
+                  <p id="step-1-desc" class="text-[10px] text-slate-500">Tiket berhasil dicatat di basis data SQLite UPT TIK</p>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="flex items-start gap-3 relative">
+                <div id="step-2-icon" class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">✓</div>
+                <div id="step-2-line" class="border-l-2 border-amber-400 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 class="text-xs font-bold text-slate-900">Triase Helpdesk & Auto-Clustering</h5>
+                  <p id="step-2-desc" class="text-[10px] text-slate-500">Korelasi mendeteksi laporan massal di ruangan yang sama $\to$ P1</p>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="flex items-start gap-3 relative">
+                <div id="step-3-icon" class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5 animate-pulse">⚡</div>
+                <div id="step-3-line" class="border-l-2 border-slate-200 absolute left-2.5 top-6 bottom-0 -mb-3"></div>
+                <div>
+                  <h5 id="step-3-title" class="text-xs font-bold text-amber-700">Penanganan Tim Jaringan NOC</h5>
+                  <p id="step-3-desc" class="text-[10px] text-slate-500">Sedang dilakukan: Dynamic client steering & DHCP pool tuning</p>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="flex items-start gap-3">
+                <div id="step-4-icon" class="w-5 h-5 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">4</div>
+                <div>
+                  <h5 id="step-4-title" class="text-xs font-bold text-slate-400">Verifikasi & Pemulihan</h5>
+                  <p id="step-4-desc" class="text-[10px] text-slate-400">Menunggu verifikasi koneksi pulih</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons for Student -->
+            <div class="space-y-2 pt-2 border-t border-slate-100">
+              <button onclick="openCertificateForCurrentTicket()" class="w-full py-2 px-3 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow transition flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-file-pdf"></i> Unduh / Lihat Surat Bukti Resmi (Untuk Dosen)
+              </button>
+              <button onclick="resetStudentForm()" class="w-full py-1.5 text-slate-500 hover:text-slate-700 text-[11px] font-semibold text-center">
+                ← Buat Laporan Baru Lainnya
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Phone Footer Navigation -->
+        <div class="bg-slate-50 border-t border-slate-200 p-2 text-center text-[10px] text-slate-400">
+          Layanan Resmi UPT TIK Kampus • Bantuan Darurat: 0812-9876-5432
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 2: DASHBOARD MONITORING NOC & HELPDESK -->
+    <!-- ========================================== -->
+    <section id="screen-noc" class="hidden space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-200">
+            Tier 1 & Tier 2 Control Center
+          </span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-1">Network Operations Center (NOC) Dashboard</h2>
+          <p class="text-sm text-slate-500">Monitoring telemetri Access Point real-time, korelasi tiket aduan darurat, dan eksekusi remediasi.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="loadNocDashboard()" class="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition flex items-center gap-1.5 shadow-sm">
+            <i class="fa-solid fa-arrows-rotate"></i> Refresh Data
+          </button>
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span> Live SQLite Connected
+          </span>
+        </div>
+      </div>
+
+      <!-- Metric Highlights Cards (Dinamis dari /api/stats) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Access Point Aktif</p>
+              <h3 id="stat-ap-count" class="text-2xl font-black text-slate-900 mt-1">4 / 4</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-tower-broadcast"></i>
+            </div>
+          </div>
+          <p id="stat-ap-warning" class="text-xs text-slate-500 mt-2 font-medium">Semua AP Beroperasi Normal</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Klien Terhubung</p>
+              <h3 id="stat-client-total" class="text-2xl font-black text-slate-900 mt-1">132</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+          <p id="stat-client-ratio" class="text-xs text-slate-400 mt-2">68% di pita 5 GHz • 32% di 2.4 GHz</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-rose-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiket Prioritas P1</p>
+              <h3 id="stat-ticket-p1" class="text-2xl font-black text-rose-600 mt-1">2 Laporan</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-bell"></i>
+            </div>
+          </div>
+          <p id="stat-ticket-p1-desc" class="text-xs text-rose-600 mt-2 font-medium">Perlu Penanganan Mendesak (&lt;15m)</p>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-emerald-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiket Terselesaikan</p>
+              <h3 id="stat-ticket-resolved" class="text-2xl font-black text-emerald-600 mt-1">3 Tiket</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+          <p class="text-xs text-emerald-700 mt-2 font-bold">Rata-rata Resolusi: 8.5 Menit</p>
+        </div>
+      </div>
+
+      <!-- Alert Insiden Massal Aktif (Dinamis) -->
+      <div id="noc-urgent-banner" class="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl shrink-0 mt-0.5">
+            <i class="fa-solid fa-triangle-exclamation animate-bounce"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase">P1 URGENT - KORELASI MASSAL</span>
+              <span class="text-xs font-semibold text-slate-500">Auto-Clustering Aktif</span>
+            </div>
+            <h4 id="noc-banner-title" class="text-base font-bold text-slate-900 mt-0.5">Beban Kritis Terdeteksi di Lab Komputer 3 (Gedung B)</h4>
+            <p id="noc-banner-desc" class="text-xs text-slate-600">
+              Multiple mahasiswa melaporkan kegagalan koneksi. AP-GedB-L2-01 mengalami beban tinggi.
+            </p>
+          </div>
+        </div>
+        <button onclick="executeQuickRemediation()" id="btn-remediation" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Eksekusi Auto-Remediasi AP
+        </button>
+      </div>
+
+      <!-- Main Layout: Heatmap Grid & Incident Queue -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        <!-- Left Column: Floor Heatmap Status (2 Cols) -->
+        <div class="lg:col-span-2 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Peta Utilisasi Access Point Per Ruangan</h3>
+              <p class="text-xs text-slate-400">Visualisasi telemetri radio, beban klien, dan latensi gateway</p>
+            </div>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Normal</span>
+              <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Overload</span>
+            </div>
+          </div>
+
+          <!-- Heatmap Room Boxes (Dinamis) -->
+          <div id="noc-heatmap-container" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+            <!-- Loading placeholder -->
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 animate-pulse text-xs text-slate-400">
+              Memuat data telemetri AP...
+            </div>
+          </div>
+
+          <!-- Quick Action Tools Panel -->
+          <div class="border-t border-slate-100 pt-4">
+            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5">Panel Perintah Cepat Teknisi (WLC & DHCP)</h4>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button onclick="executeAction('DYNAMIC_LOAD_BALANCING', 'Band Steering 5GHz diaktifkan pada AP Lab 3.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-blue-600 font-bold text-xs"><i class="fa-solid fa-arrows-split-up-and-left mr-1"></i> Band Steering</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Arahkan user ke 5GHz</div>
+              </button>
+              <button onclick="executeAction('DHCP_FLUSH', 'DHCP Pool Flushed: 48 IP kadaluarsa berhasil dirilis.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-purple-600 font-bold text-xs"><i class="fa-solid fa-rotate mr-1"></i> Flush Lease IP</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Lepas IP stale &lt; 2 jam</div>
+              </button>
+              <button onclick="executeAction('DYNAMIC_LOAD_BALANCING', 'QoS Applied: Bandwidth streaming dibatasi, port LMS diprioritaskan.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-amber-600 font-bold text-xs"><i class="fa-solid fa-filter mr-1"></i> Prioritas LMS (QoS)</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Limit trafik non-akademik</div>
+              </button>
+              <button onclick="executeAction('RF_TUNING', 'Radio Re-tuned: Kanal dipindah ke frekuensi non-overlapping.')" class="p-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-left transition">
+                <div class="text-emerald-600 font-bold text-xs"><i class="fa-solid fa-sliders mr-1"></i> RF Auto Tuning</div>
+                <div class="text-[10px] text-slate-400 mt-0.5">Optimalkan transmisi radio</div>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Clustered Ticket Queue (1 Col) -->
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3.5 flex flex-col">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">Antrean Tiket Masuk</h3>
+              <p class="text-xs text-slate-400">Klik tiket untuk aksi & detail</p>
+            </div>
+            <span id="noc-tickets-count-badge" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">0 Tiket</span>
+          </div>
+
+          <!-- Ticket Items Container (Dinamis dari /api/tickets) -->
+          <div id="noc-tickets-container" class="space-y-2.5 max-h-[460px] overflow-y-auto custom-scroll pr-1 flex-1">
+            <!-- Loading placeholder -->
+            <div class="p-3 text-center text-xs text-slate-400">Memuat tiket...</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 3: SURAT BUKTI GANGGUAN RESMI (PDF) -->
+    <!-- ========================================== -->
+    <section id="screen-certificate" class="hidden">
+      <!-- Action Toolbar (Hidden in Print) -->
+      <div class="no-print max-w-3xl mx-auto mb-4 flex flex-col sm:flex-row justify-between items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+        <div class="flex items-center gap-3">
+          <div>
+            <span class="text-xs font-bold text-slate-700">Dokumen Digital Resmi UPT TIK</span>
+            <p class="text-[11px] text-slate-400">Bukti keabsahan kendala jaringan untuk Dosen Pengampu Tugas</p>
+          </div>
+          <!-- Selector Tiket untuk Surat -->
+          <select id="cert-ticket-select" onchange="loadCertificateForSelectedTicket(this.value)" class="text-xs px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 font-mono font-bold text-blue-800 outline-none">
+            <!-- Diisi otomatis dari daftar tiket -->
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="approveCurrentCertificate()" id="btn-approve-cert" class="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow transition flex items-center gap-1.5">
+            <i class="fa-solid fa-check-double"></i> Setujui Surat (Dosen)
+          </button>
+          <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow transition flex items-center gap-1.5">
+            <i class="fa-solid fa-print"></i> Cetak / Simpan PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- Formal Letter Paper (A4 Style) -->
+      <div class="max-w-3xl mx-auto bg-white border border-slate-300 rounded-xl p-8 sm:p-12 shadow-lg space-y-6 text-slate-900">
+        
+        <!-- Kop Surat Resmi Kampus -->
+        <div class="border-b-4 border-double border-slate-900 pb-4 text-center space-y-1">
+          <h4 class="text-xs uppercase tracking-widest font-bold text-slate-700">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</h4>
+          <h2 class="text-lg sm:text-xl font-black tracking-wide text-slate-950 uppercase">UNIVERSITAS TEKNOLOGI KAMPUS TERPADU</h2>
+          <h3 class="text-xs font-bold text-blue-900 uppercase tracking-wider">UNIT PELAKSANA TEKNIS TEKNOLOGI INFORMASI DAN KOMUNIKASI (UPT TIK)</h3>
+          <p class="text-[10px] text-slate-500">Gedung Rektorat Lt. 2, Kampus Terpadu • Email: helpdesk.tik@univ.ac.id • Web: tik.univ.ac.id</p>
+        </div>
+
+        <!-- Judul & Nomor Surat -->
+        <div class="text-center space-y-1 pt-2">
+          <h3 class="text-sm font-extrabold tracking-wider underline uppercase">SURAT KETERANGAN GANGGUAN TEKNIS JARINGAN WI-FI</h3>
+          <p id="cert-number-text" class="text-xs font-mono text-slate-600">Nomor: 421.3/UPT-TIK/SK-GANGGUAN/XI/2026-0042</p>
+        </div>
+
+        <!-- Isi Pengantar -->
+        <div class="text-xs leading-relaxed text-justify space-y-2">
+          <p>
+            Dengan ini, Kepala Unit Pelaksana Teknis Teknologi Informasi dan Komunikasi (UPT TIK) menerangkan secara resmi bahwa berdasarkan catatan telemetri sistem pemantauan nirkabel dan log tiket helpdesk:
+          </p>
+        </div>
+
+        <!-- Tabel Rincian Mahasiswa & Insiden (Dinamis) -->
+        <table class="w-full text-xs border border-slate-300 rounded-lg overflow-hidden">
+          <tbody>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold w-1/3 text-slate-700">Nama Mahasiswa</td>
+              <td id="cert-student-name" class="p-2.5 font-semibold text-slate-900">Ahmad Fauzi</td>
+            </tr>
+            <tr class="border-b border-slate-200">
+              <td class="p-2.5 font-bold text-slate-700">Nomor Induk Mahasiswa (NIM)</td>
+              <td id="cert-student-nim" class="p-2.5 font-mono text-slate-900">220101089</td>
+            </tr>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold text-slate-700">Lokasi Kejadian</td>
+              <td id="cert-room-location" class="p-2.5 text-slate-900">Gedung B (Fakultas Teknik) - Lantai 2, Lab Komputer 3</td>
+            </tr>
+            <tr class="border-b border-slate-200">
+              <td class="p-2.5 font-bold text-slate-700">Mata Kuliah & Dosen</td>
+              <td id="cert-course-info" class="p-2.5 text-slate-900">Jaringan Komputer Lanjut (Dr. Eng. Wahyu Pratama, M.Kom.)</td>
+            </tr>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold text-slate-700">Nomor Tiket Terverifikasi</td>
+              <td id="cert-ticket-id" class="p-2.5 font-mono font-bold text-blue-800">#TKT-202611-0042 (Status: Resolved)</td>
+            </tr>
+            <tr class="border-b border-slate-200">
+              <td class="p-2.5 font-bold text-slate-700">Waktu Terjadinya Gangguan</td>
+              <td id="cert-time-span" class="p-2.5 text-slate-900">04 November 2026, Pukul 09:38 WIB s/d 09:55 WIB (Durasi: 17 Menit)</td>
+            </tr>
+            <tr class="border-b border-slate-200 bg-slate-50">
+              <td class="p-2.5 font-bold text-slate-700">Akar Masalah (RCA)</td>
+              <td id="cert-rca-desc" class="p-2.5 text-slate-800">Access Point Overload (&gt;65 klien aktif) & Kehabisan Pool Alamat IP DHCP saat sesi submit daring serentak.</td>
+            </tr>
+            <tr>
+              <td class="p-2.5 font-bold text-slate-700">Status Persetujuan Dosen</td>
+              <td id="cert-approval-badge" class="p-2.5">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">MENUNGGU VERIFIKASI DOSEN</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Rekomendasi Dispensasi Akademik -->
+        <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-xs text-slate-800 space-y-1">
+          <p class="font-bold text-blue-900">Rekomendasi Akademik kepada Dosen Pengampu:</p>
+          <p class="leading-relaxed">
+            Sehubungan dengan insiden kegagalan transmisi data di atas yang terbukti berada di luar kendali mahasiswa bersangkutan, UPT TIK merekomendasikan pemberian <b>dispensasi perpanjangan waktu pengumpulan</b> atau pembukaan kembali slot tugas daring di LMS selama <b>minimal 30 menit</b> sejak surat ini diterbitkan.
+          </p>
+        </div>
+
+        <!-- Tanda Tangan & QR Code Validasi -->
+        <div class="pt-6 flex justify-between items-end">
+          <!-- QR Code Validation -->
+          <div class="space-y-1 text-center">
+            <div class="w-24 h-24 border border-slate-300 p-1.5 rounded-lg bg-white shadow-sm flex items-center justify-center">
+              <img id="cert-qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=TIK_VERIFIED_VALID" alt="QR Code" class="w-full h-full">
+            </div>
+            <p class="text-[9px] font-mono text-slate-400">Scan Verifikasi Keaslian</p>
+          </div>
+
+          <!-- Official Signature Box -->
+          <div class="text-center space-y-1 text-xs">
+            <p class="text-slate-600">Dikeluarkan di: Kampus Terpadu</p>
+            <p id="cert-issued-date" class="text-slate-600">Pada tanggal: 04 November 2026</p>
+            <p class="font-bold text-slate-800 mt-2">Kepala UPT TIK,</p>
+            <div class="py-4 text-blue-900 font-serif italic text-sm font-bold opacity-80">
+              [Tanda Tangan Digital Tersertifikasi]
+            </div>
+            <p class="font-bold underline text-slate-900">Ir. H. Hendra Wijaya, M.T., CCNA</p>
+            <p class="text-[10px] text-slate-500 font-mono">NIP. 19780415 200501 1 002</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL DETAIL TIKET (NOC POPUP) -->
+  <!-- ========================================== -->
+  <div id="ticket-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4">
+      <div class="flex justify-between items-start border-b border-slate-100 pb-3">
+        <div>
+          <span id="modal-priority-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-600 text-white uppercase">P1-CRITICAL</span>
+          <h3 id="modal-ticket-id" class="text-lg font-black text-slate-900 font-mono mt-1">#TKT-202611-0042</h3>
+        </div>
+        <button onclick="closeTicketModal()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
+      </div>
+
+      <div class="space-y-2 text-xs text-slate-700">
+        <p><b>Pelapor:</b> <span id="modal-pelapor">Ahmad Fauzi (220101089)</span></p>
+        <p><b>Lokasi:</b> <span id="modal-lokasi">Gedung B - Lab Komputer 3</span></p>
+        <p><b>Mata Kuliah:</b> <span id="modal-mk">Jaringan Komputer Lanjut</span></p>
+        <p><b>Gejala:</b> <span id="modal-gejala">Koneksi putus saat upload tugas</span></p>
+        <p><b>Status Saat Ini:</b> <span id="modal-status" class="font-bold text-blue-700">ESCALATED_NOC</span></p>
+      </div>
+
+      <!-- Riwayat Tindakan -->
+      <div>
+        <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">Riwayat Penanganan Teknis:</h4>
+        <div id="modal-actions-list" class="space-y-1.5 max-h-32 overflow-y-auto bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px]">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+
+      <div class="border-t border-slate-100 pt-3 flex flex-wrap gap-2 justify-end">
+        <button onclick="actionResolveCurrentTicket()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1">
+          <i class="fa-solid fa-check"></i> Tandai Resolved
+        </button>
+        <button onclick="actionCreateCertificateForModal()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1">
+          <i class="fa-solid fa-file-contract"></i> Buat Surat Resmi
+        </button>
+        <button onclick="closeTicketModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT APPLICATION LOGIC -->
+  <script>
+    const API_BASE = window.location.protocol.startsWith('http') ? '' : 'http://localhost:3000';
+    let isApiConnected = false;
+    let currentActiveTicket = null;
+    let allTicketsCache = [];
+    let selectedModalTicketId = null;
+
+    // 1. Inisialisasi & Cek Koneksi Server
+    async function initApp() {
+      try {
+        const res = await fetch(`${API_BASE}/api/health`);
+        if (res.ok) {
+          isApiConnected = true;
+          const badge = document.getElementById('backend-status-badge');
+          badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1';
+          badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live Backend Active';
+          
+          await loadRoomsDropdown();
+          await loadNocDashboard();
+          startLivePolling();
+        }
+      } catch (e) {
+        console.log('[API] Menjalankan mode standalone/offline.');
+        const badge = document.getElementById('backend-status-badge');
+        badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-500/20 text-slate-300 border border-slate-500/30 flex items-center gap-1';
+        badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Mode Standalone';
+      }
+    }
+
+    // 2. Navigasi Antar-Layar
+    function switchScreen(screen) {
+      document.getElementById('screen-student').classList.add('hidden');
+      document.getElementById('screen-noc').classList.add('hidden');
+      document.getElementById('screen-certificate').classList.add('hidden');
+
+      document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+
+      if (screen === 'student') {
+        document.getElementById('screen-student').classList.remove('hidden');
+        document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+      } else if (screen === 'noc') {
+        document.getElementById('screen-noc').classList.remove('hidden');
+        document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+        loadNocDashboard();
+      } else if (screen === 'certificate') {
+        document.getElementById('screen-certificate').classList.remove('hidden');
+        document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+        populateCertificateDropdown();
+      }
+    }
+
+    // 3. Muat Dropdown Ruangan dari Database
+    async function loadRoomsDropdown() {
+      try {
+        const res = await fetch(`${API_BASE}/api/rooms`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const select = document.getElementById('stu-room-select');
+          select.innerHTML = '';
+          json.data.forEach(r => {
+            const opt = document.createElement('option');
+            opt.value = r.id_ruangan;
+            opt.innerText = `${r.nama_gedung} - Lt ${r.nomor_lantai} (${r.nama_ruangan})`;
+            select.appendChild(opt);
+          });
+        }
+      } catch (err) {
+        console.warn('Gagal memuat master ruangan:', err);
+      }
+    }
+
+    // 4. Submit Tiket Mahasiswa (POST /api/tickets)
+    async function submitStudentTicket() {
+      const nim = document.getElementById('stu-nim').value.trim();
+      const name = document.getElementById('stu-name').value.trim();
+      const roomId = document.getElementById('stu-room-select').value;
+      const roomText = document.getElementById('stu-room-select').selectedOptions[0]?.text || roomId;
+      const course = document.getElementById('stu-course').value.trim();
+      const lecturer = document.getElementById('stu-lecturer').value.trim();
+      const symptom = document.getElementById('stu-symptom').value;
+
+      if (!nim || !name) {
+        alert('Mohon isi NIM dan Nama Mahasiswa terlebih dahulu!');
+        return;
+      }
+
+      const btn = document.getElementById('btn-submit-ticket');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim Laporan...';
+      btn.disabled = true;
+
+      try {
+        if (isApiConnected) {
+          const payload = {
+            userId: nim,
+            namaPelapor: name,
+            idRuangan: roomId,
+            mataKuliah: course,
+            dosenPengampu: lecturer,
+            gejalaGangguan: symptom,
+            isEmergencyDeadline: true
+          };
+
+          const res = await fetch(`${API_BASE}/api/tickets`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            currentActiveTicket = json.data;
+            showTrackerState(json.data, roomText);
+            showToast(json.message);
+            loadNocDashboard();
+          }
+        } else {
+          // Fallback standalone simulation
+          currentActiveTicket = {
+            no_tiket: `TKT-${new Date().toISOString().slice(0,7).replace('-','')}-` + Math.floor(1000 + Math.random()*9000),
+            user_id: nim,
+            nama_pelapor: name,
+            id_ruangan: roomId,
+            prioritas: 'P1-CRITICAL',
+            status_tiket: 'ESCALATED_NOC'
+          };
+          showTrackerState(currentActiveTicket, roomText);
+        }
+      } catch (err) {
+        console.error('Error submit ticket:', err);
+        showToast('Gagal mengirim tiket ke server.');
+      } finally {
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Laporan Darurat Sekarang';
+        btn.disabled = false;
+      }
+    }
+
+    function showTrackerState(ticket, roomText) {
+      document.getElementById('tracker-ticket-id').innerText = '#' + ticket.no_tiket;
+      document.getElementById('tracker-location-text').innerText = `Lokasi: ${roomText}`;
+      
+      const pBadge = document.getElementById('tracker-priority-badge');
+      pBadge.innerText = ticket.prioritas;
+      pBadge.className = `inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold ${ticket.prioritas === 'P1-CRITICAL' ? 'bg-rose-600 text-white' : 'bg-amber-500 text-white'} uppercase`;
+
+      // Perbarui status stepper
+      if (ticket.status_tiket === 'RESOLVED' || ticket.status_tiket === 'CLOSED') {
+        document.getElementById('step-3-icon').innerText = '✓';
+        document.getElementById('step-3-icon').className = 'w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5';
+        document.getElementById('step-4-icon').innerText = '✓';
+        document.getElementById('step-4-icon').className = 'w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5';
+        document.getElementById('step-4-title').className = 'text-xs font-bold text-emerald-700';
+        document.getElementById('step-4-desc').innerText = 'Koneksi Wi-Fi telah stabil kembali. Silakan submit tugas!';
+      }
+
+      document.getElementById('student-form-state').classList.add('hidden');
+      document.getElementById('student-tracker-state').classList.remove('hidden');
+    }
+
+    function resetStudentForm() {
+      document.getElementById('student-tracker-state').classList.add('hidden');
+      document.getElementById('student-form-state').classList.remove('hidden');
+    }
+
+    // 5. Muat Data Dashboard NOC (/api/stats, /api/tickets, /api/access-points)
+    async function loadNocDashboard() {
+      if (!isApiConnected) return;
+
+      try {
+        // A. Ambil Statistik Ringkasan
+        const resStats = await fetch(`${API_BASE}/api/stats`);
+        const statsJson = await resStats.json();
+        if (statsJson.success && statsJson.data) {
+          const s = statsJson.data;
+          document.getElementById('stat-ap-count').innerText = `${s.totalAccessPoints - s.criticalAccessPoints} / ${s.totalAccessPoints}`;
+          document.getElementById('stat-ap-warning').innerText = s.criticalAccessPoints > 0 
+            ? `⚠️ ${s.criticalAccessPoints} Unit AP Overloaded`
+            : 'Semua AP Beroperasi Normal';
+          document.getElementById('stat-client-total').innerText = s.activeClients.total.toLocaleString();
+          document.getElementById('stat-client-ratio').innerText = `${s.activeClients.percentage5Ghz}% di pita 5 GHz • ${100 - s.activeClients.percentage5Ghz}% di 2.4 GHz`;
+          document.getElementById('stat-ticket-p1').innerText = `${s.activeCriticalP1} Laporan`;
+          document.getElementById('stat-ticket-resolved').innerText = `${s.totalResolved} Tiket`;
+
+          // Banner Massal
+          const banner = document.getElementById('noc-urgent-banner');
+          if (s.activeCriticalP1 > 0 || s.criticalAccessPoints > 0) {
+            banner.classList.remove('hidden');
+          } else {
+            banner.classList.add('hidden');
+          }
+        }
+
+        // B. Ambil Telemetri Access Points (Heatmap)
+        const resAps = await fetch(`${API_BASE}/api/access-points`);
+        const apsJson = await resAps.json();
+        if (apsJson.success && apsJson.data) {
+          renderHeatmap(apsJson.data);
+        }
+
+        // C. Ambil Antrean Tiket
+        const resTickets = await fetch(`${API_BASE}/api/tickets`);
+        const tktJson = await resTickets.json();
+        if (tktJson.success && tktJson.data) {
+          allTicketsCache = tktJson.data;
+          renderTicketQueue(tktJson.data);
+        }
+      } catch (err) {
+        console.warn('Gagal memuat dashboard NOC:', err);
+      }
+    }
+
+    function renderHeatmap(aps) {
+      const container = document.getElementById('noc-heatmap-container');
+      container.innerHTML = '';
+
+      aps.forEach(ap => {
+        const isOverload = ap.status_operasional === 'OVERLOADED';
+        const clientCount = ap.connected_clients || 0;
+        const loss = ap.packet_loss_ratio || 0;
+        const latency = ap.latency_gateway_ms || 5;
+        const percent = Math.min(Math.round((clientCount / (ap.max_client_limit || 50)) * 100), 100);
+
+        const card = document.createElement('div');
+        card.className = `p-4 rounded-xl border-2 ${isOverload ? 'border-rose-500 bg-rose-50/60' : 'border-slate-200 bg-slate-50 hover:border-slate-300'} transition`;
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <span class="text-xs font-bold ${isOverload ? 'text-rose-900' : 'text-slate-700'}">${ap.nama_ruangan}</span>
+            <span class="px-1.5 py-0.5 rounded ${isOverload ? 'bg-rose-600 text-white' : 'bg-emerald-100 text-emerald-800'} text-[9px] font-black uppercase">
+              ${ap.status_operasional}
+            </span>
+          </div>
+          <p class="text-[11px] ${isOverload ? 'text-rose-600 font-mono' : 'text-slate-400'} mt-1">${ap.ap_name}</p>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span class="text-lg font-black ${isOverload ? 'text-rose-700' : 'text-slate-800'}">${clientCount} Klien</span>
+            <span class="text-[11px] ${isOverload ? 'text-rose-600 font-bold' : 'text-emerald-600 font-semibold'}">Loss: ${loss}% • ${latency}ms</span>
+          </div>
+          <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div class="${isOverload ? 'bg-rose-600' : 'bg-emerald-500'} h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderTicketQueue(tickets) {
+      const container = document.getElementById('noc-tickets-container');
+      const countBadge = document.getElementById('noc-tickets-count-badge');
+      countBadge.innerText = `${tickets.length} Tiket`;
+      container.innerHTML = '';
+
+      if (!tickets.length) {
+        container.innerHTML = '<div class="p-4 text-center text-xs text-slate-400">Tidak ada tiket aktif.</div>';
+        return;
+      }
+
+      tickets.forEach(t => {
+        const isCritical = t.prioritas === 'P1-CRITICAL';
+        const isResolved = t.status_tiket === 'RESOLVED' || t.status_tiket === 'CLOSED';
+
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl border ${isResolved ? 'border-emerald-200 bg-emerald-50/50' : (isCritical ? 'border-amber-200 bg-amber-50/60 hover:bg-amber-100' : 'border-slate-200 bg-slate-50 hover:bg-slate-100')} transition cursor-pointer`;
+        card.onclick = () => openTicketModal(t.no_tiket);
+        card.innerHTML = `
+          <div class="flex justify-between items-start">
+            <span class="text-[11px] font-mono font-bold ${isCritical ? 'text-amber-900' : 'text-slate-700'}">#${t.no_tiket}</span>
+            <span class="px-1.5 py-0.5 rounded ${isResolved ? 'bg-emerald-600 text-white' : (isCritical ? 'bg-rose-600 text-white' : 'bg-slate-200 text-slate-700')} text-[9px] font-bold">
+              ${isResolved ? 'RESOLVED' : t.prioritas}
+            </span>
+          </div>
+          <p class="text-xs font-bold text-slate-800 mt-1">${t.nama_pelapor || 'Mahasiswa'} (NIM ${t.user_id})</p>
+          <p class="text-[11px] text-slate-500 truncate">${t.nama_ruangan || t.id_ruangan} • ${t.gejala_gangguan}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 6. Eksekusi Auto-Remediasi AP
+    async function executeQuickRemediation() {
+      const btn = document.getElementById('btn-remediation');
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengoptimasi Jaringan...';
+      btn.disabled = true;
+
+      try {
+        if (isApiConnected) {
+          const res = await fetch(`${API_BASE}/api/remediation`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              apMac: '44:D9:E7:88:A1:03',
+              operatorId: 'NOC-002',
+              actionType: 'DYNAMIC_LOAD_BALANCING'
+            })
+          });
+          const json = await res.json();
+          if (json.success) {
+            showToast('Remediasi Berhasil! Beban AP Lab 3 dialihkan & tiket otomatis RESOLVED.');
+            loadNocDashboard();
+          }
+        }
+      } catch (err) {
+        console.error('Error remediation:', err);
+      } finally {
+        setTimeout(() => {
+          btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i> Eksekusi Auto-Remediasi AP';
+          btn.disabled = false;
+        }, 1200);
+      }
+    }
+
+    async function executeAction(actionType, message) {
+      if (isApiConnected) {
+        await fetch(`${API_BASE}/api/remediation`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            apMac: '44:D9:E7:88:A1:03',
+            operatorId: 'NOC-002',
+            actionType: actionType
+          })
+        });
+        loadNocDashboard();
+      }
+      showToast(message);
+    }
+
+    // 7. Modal Tiket & Detail
+    async function openTicketModal(noTiket) {
+      selectedModalTicketId = noTiket;
+      const modal = document.getElementById('ticket-modal');
+
+      try {
+        const res = await fetch(`${API_BASE}/api/tickets/${noTiket}`);
+        const json = await res.json();
+        if (json.success && json.data) {
+          const t = json.data;
+          document.getElementById('modal-ticket-id').innerText = '#' + t.no_tiket;
+          document.getElementById('modal-pelapor').innerText = `${t.nama_pelapor} (NIM ${t.user_id})`;
+          document.getElementById('modal-lokasi').innerText = `${t.nama_gedung} - ${t.nama_ruangan}`;
+          document.getElementById('modal-mk').innerText = `${t.mata_kuliah} (${t.dosen_pengampu})`;
+          document.getElementById('modal-gejala').innerText = t.gejala_gangguan;
+          document.getElementById('modal-status').innerText = t.status_tiket;
+
+          const actionList = document.getElementById('modal-actions-list');
+          actionList.innerHTML = '';
+          if (t.riwayat_tindakan && t.riwayat_tindakan.length) {
+            t.riwayat_tindakan.forEach(a => {
+              const div = document.createElement('div');
+              div.className = 'border-b border-slate-200 pb-1';
+              div.innerHTML = `<b>${a.waktu_tindakan}:</b> [${a.aksi_teknis}] ${a.catatan_teknis}`;
+              actionList.appendChild(div);
+            });
+          } else {
+            actionList.innerHTML = '<div>Belum ada tindakan teknis dicatat.</div>';
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal memuat detail tiket modal:', err);
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeTicketModal() {
+      document.getElementById('ticket-modal').classList.add('hidden');
+    }
+
+    async function actionResolveCurrentTicket() {
+      if (!selectedModalTicketId) return;
+      try {
+        await fetch(`${API_BASE}/api/tickets/${selectedModalTicketId}/status`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            status: 'RESOLVED',
+            operatorId: 'NOC-002',
+            catatanTeknis: 'Diverifikasi langsung oleh operator NOC, koneksi normal.',
+            aksiTeknis: 'Manual Verification Resolved'
+          })
+        });
+        showToast(`Tiket #${selectedModalTicketId} berhasil ditandai RESOLVED.`);
+        closeTicketModal();
+        loadNocDashboard();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function actionCreateCertificateForModal() {
+      if (!selectedModalTicketId) return;
+      await generateCertificateForTicket(selectedModalTicketId);
+      closeTicketModal();
+      switchScreen('certificate');
+    }
+
+    // 8. Logika Surat Keterangan Resmi (Screen 3)
+    function populateCertificateDropdown() {
+      const select = document.getElementById('cert-ticket-select');
+      select.innerHTML = '';
+      if (!allTicketsCache.length) {
+        select.innerHTML = '<option>Tidak ada tiket</option>';
+        return;
+      }
+      allTicketsCache.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.no_tiket;
+        opt.innerText = `${t.no_tiket} - ${t.nama_pelapor}`;
+        select.appendChild(opt);
+      });
+      if (allTicketsCache[0]) {
+        loadCertificateForSelectedTicket(allTicketsCache[0].no_tiket);
+      }
+    }
+
+    async function generateCertificateForTicket(noTiket) {
+      try {
+        const res = await fetch(`${API_BASE}/api/dispensations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ noTiket: noTiket })
+        });
+        const json = await res.json();
+        if (json.success && json.data) {
+          renderCertificateView(json.data);
+        }
+      } catch (err) {
+        console.warn('Gagal terbitkan surat:', err);
+      }
+    }
+
+    async function loadCertificateForSelectedTicket(noTiket) {
+      await generateCertificateForTicket(noTiket);
+    }
+
+    function openCertificateForCurrentTicket() {
+      const ticketId = currentActiveTicket?.no_tiket || 'TKT-202611-0042';
+      switchScreen('certificate');
+      generateCertificateForTicket(ticketId);
+    }
+
+    function renderCertificateView(cert) {
+      document.getElementById('cert-number-text').innerText = `Nomor: ${cert.no_surat}`;
+      document.getElementById('cert-student-name').innerText = cert.nama_mahasiswa || 'Ahmad Fauzi';
+      document.getElementById('cert-student-nim').innerText = cert.nim_mahasiswa || cert.user_id || '220101089';
+      document.getElementById('cert-room-location').innerText = `${cert.nama_gedung || 'Gedung B'} - ${cert.nama_ruangan || 'Lab Komputer 3'}`;
+      document.getElementById('cert-course-info').innerText = `${cert.nama_mata_kuliah} (${cert.nama_dosen})`;
+      document.getElementById('cert-ticket-id').innerText = `#${cert.no_tiket} (Status: ${cert.status_tiket || 'RESOLVED'})`;
+      document.getElementById('cert-time-span').innerText = `${cert.waktu_mulai_gangguan} s/d ${cert.waktu_selesai_gangguan}`;
+      
+      const qrData = encodeURIComponent(cert.url_qr_verification || `http://localhost:3000/api/dispensations/verify/${cert.token_verifikasi}`);
+      document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${qrData}`;
+
+      const badge = document.getElementById('cert-approval-badge');
+      if (cert.status_persetujuan_dosen === 'DISETUJUI') {
+        badge.innerHTML = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800">✅ TELAH DISETUJUI DOSEN (DISPENSASI AKTIF)</span>';
+      } else {
+        badge.innerHTML = '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800">MENUNGGU VERIFIKASI DOSEN</span>';
+      }
+    }
+
+    async function approveCurrentCertificate() {
+      const select = document.getElementById('cert-ticket-select');
+      const ticketId = select.value;
+      if (!ticketId) return;
+
+      try {
+        const res = await fetch(`${API_BASE}/api/dispensations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ noTiket: ticketId })
+        });
+        const json = await res.json();
+        if (json.success && json.data?.token_verifikasi) {
+          const token = json.data.token_verifikasi;
+          await fetch(`${API_BASE}/api/dispensations/verify/${token}/approve`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: 'DISETUJUI' })
+          });
+          showToast('Sukses! Dosen menyetujui dispensasi tugas susulan.');
+          loadCertificateForSelectedTicket(ticketId);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // 9. Utilities & Live Polling
+    function handleFileSelect(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('stu-file-name').innerText = file.name + ` (${(file.size/1024).toFixed(1)} KB)`;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('stu-file-preview').src = e.target.result;
+          document.getElementById('stu-file-preview-box').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-5 right-5 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-2xl z-50 flex items-center gap-2.5 border border-slate-700 transition transform duration-300';
+      toast.innerHTML = `<i class="fa-solid fa-bell text-amber-400"></i> ${msg}`;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 400);
+      }, 3500);
+    }
+
+    function startLivePolling() {
+      setInterval(() => {
+        if (!document.getElementById('screen-noc').classList.contains('hidden')) {
+          loadNocDashboard();
+        }
+      }, 3000);
+    }
+
+    // Jam perangkat
+    function updateClock() {
+      const now = new Date();
+      const el = document.getElementById('phone-clock');
+      if (el) el.innerText = now.toTimeString().slice(0,5);
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    window.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+</html>
+
