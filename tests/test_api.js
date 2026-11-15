@@ -195,6 +195,22 @@ async function runTests() {
         assert.strictEqual(res.data.data.status_persetujuan_dosen, 'DISETUJUI');
     });
 
+    // Test 11: Endpoint Jembatan Machine Learning XGBoost
+    await test('POST /api/ml/predict (Prediksi Prioritas & SLA XGBoost)', async () => {
+        const payload = {
+            connectedClients: 65,
+            cpuUtilization: 94.2,
+            packetLossRatio: 12.8,
+            isEmergencyDeadline: true,
+            clusterCount: 2,
+            isClustered: true
+        };
+        const res = await request('/api/ml/predict', { method: 'POST' }, payload);
+        assert.strictEqual(res.status, 200);
+        assert.strictEqual(res.data.success, true);
+        assert.ok(res.data.data.model.includes('XGBoost'));
+    });
+
     console.log(`\n======================================================`);
     console.log(`📊 HASIL PENGUJIAN: ${passed} LULUS, ${failed} GAGAL`);
     console.log(`======================================================\n`);

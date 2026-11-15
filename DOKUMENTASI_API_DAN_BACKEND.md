@@ -310,6 +310,49 @@ ProjectP-ML/
 
 ---
 
+### F. Layanan Prediksi Cerdas XGBoost (Machine Learning Microservice)
+
+#### 13. Health Check ML Microservice
+* **Endpoint**: `GET /api/ml/health`
+* **Deskripsi**: Memeriksa ketersediaan microservice Python Flask XGBoost di port 5001.
+
+#### 14. Inferensi Prediksi Prioritas & Estimasi SLA Tiket
+* **Endpoint**: `POST /api/ml/predict`
+* **Headers**: `Content-Type: application/json`
+* **Payload Request**:
+```json
+{
+  "connectedClients": 65,
+  "cpuUtilization": 94.2,
+  "packetLossRatio": 12.8,
+  "isEmergencyDeadline": true,
+  "clusterCount": 2,
+  "isClustered": true
+}
+```
+* **Respon Contoh (`200 OK`)**:
+```json
+{
+  "success": true,
+  "data": {
+    "mlEnabled": true,
+    "model": "XGBoost",
+    "prediction": {
+      "priority": {
+        "label": "P1-CRITICAL",
+        "confidence": 0.9821
+      },
+      "sla": {
+        "predicted_resolution_minutes": 6.2,
+        "sla_status": "ON_TRACK"
+      }
+    }
+  }
+}
+```
+
+---
+
 ## 4. PANDUAN PENGGUNAAN & PENGUJIAN
 
 ### A. Menjalankan Server

@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "init-db": "node database/init_db.js",
-    "test": "node tests/test_api.js"
+    "test": "node tests/test_api.js",
+    "ml:data": "python ml/generate_dataset.py",
+    "ml:train": "python ml/train_model.py",
+    "ml:start": "python ml/ml_service.py"
   },
   "keywords": [
     "itsm",

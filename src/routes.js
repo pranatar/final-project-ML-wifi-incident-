@@ -6,6 +6,7 @@ const ticketService = require('./services/ticketService');
 const telemetryService = require('./services/telemetryService');
 const dispensationService = require('./services/dispensationService');
 const statsService = require('./services/statsService');
+const mlService = require('./services/mlService');
 
 async function handleApiRequest(req, res) {
     const parsedUrl = url.parse(req.url, true);
@@ -155,6 +156,18 @@ async function handleApiRequest(req, res) {
         if (pathname === '/api/stats' && method === 'GET') {
             const stats = statsService.getDashboardStats();
             return sendJson(200, { success: true, data: stats });
+        }
+
+        // 12. XGBoost ML Service Integrations
+        if (pathname === '/api/ml/health' && method === 'GET') {
+            const health = await mlService.checkMlHealth();
+            return sendJson(health.available ? 200 : 503, { success: health.available, data: health });
+        }
+
+        if (pathname === '/api/ml/predict' && method === 'POST') {
+            const body = await parseBody();
+            const result = await mlService.predictTicket(body);
+            return sendJson(200, { success: true, data: result });
         }
 
         // 404 Not Found untuk endpoint API lainnya

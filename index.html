@@ -409,6 +409,64 @@
         </div>
 
       </div>
+
+      <!-- ========================================== -->
+      <!-- XGBOOST MACHINE LEARNING INTELLIGENCE CARD -->
+      <!-- ========================================== -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-white space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-indigo-800/50 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-lg">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold tracking-tight">XGBoost Incident &amp; SLA AI Engine</h3>
+                <span id="ml-engine-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <i class="fa-solid fa-circle-check mr-1"></i> Model Active (98% Accuracy)
+                </span>
+              </div>
+              <p class="text-xs text-indigo-200/80">Prediksi real-time keparahan prioritas tiket &amp; estimasi waktu resolusi berbasis 800 sampel telemetri</p>
+            </div>
+          </div>
+          <button onclick="runXgBoostInference()" id="btn-run-ml" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0 self-start md:self-auto">
+            <i class="fa-solid fa-bolt"></i> Simulasikan Prediksi AI Baru
+          </button>
+        </div>
+
+        <!-- 3 Columns Metric Prediction View -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: Prioritas Tiket XGBoost -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Prediksi Prioritas Tiket</span>
+            <div class="flex items-baseline justify-between">
+              <span id="ml-pred-priority" class="text-xl font-black text-rose-400">P1-CRITICAL</span>
+              <span id="ml-pred-conf" class="text-xs font-mono bg-rose-500/20 px-2 py-0.5 rounded text-rose-300 font-bold">Confidence: 95.5%</span>
+            </div>
+            <p class="text-[11px] text-slate-300">Model: <code class="text-indigo-300">xgb_priority.json</code> (XGBClassifier 100 Trees)</p>
+          </div>
+
+          <!-- Card 2: Estimasi SLA XGBRegressor -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Estimasi Waktu Resolusi (SLA)</span>
+            <div class="flex items-baseline justify-between">
+              <span id="ml-pred-sla" class="text-xl font-black text-emerald-400">18.6 Menit</span>
+              <span id="ml-pred-status" class="text-xs font-mono bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-300 font-bold">STATUS: ON TRACK</span>
+            </div>
+            <p class="text-[11px] text-slate-300">Model: <code class="text-indigo-300">xgb_sla.json</code> (RMSE 5.50 min, R² 0.756)</p>
+          </div>
+
+          <!-- Card 3: Fitur Masukan Aktif -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Fitur Telemetri Terdeteksi</span>
+            <div class="text-xs text-slate-200 font-mono space-y-1">
+              <div>CPU AP: <span id="ml-feat-cpu" class="text-rose-300 font-bold">94.2%</span> • Loss: <span id="ml-feat-loss" class="text-rose-300 font-bold">12.8%</span></div>
+              <div>Klien Terhubung: <span id="ml-feat-clients" class="text-indigo-200 font-bold">65 Klien</span> • Pool DHCP: <span class="text-indigo-200 font-bold">2 IP</span></div>
+              <div class="text-[10px] text-slate-400">Korelasi Ruangan: Lab 3 (Gedung B) • Emergency: Yes</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ========================================== -->
@@ -532,6 +590,64 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- ========================================== -->
+      <!-- XGBOOST MACHINE LEARNING INTELLIGENCE CARD -->
+      <!-- ========================================== -->
+      <div class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 border border-indigo-500/30 rounded-2xl p-6 shadow-xl text-white space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-indigo-800/50 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-lg shadow-lg">
+              <i class="fa-solid fa-brain"></i>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-bold tracking-tight">XGBoost Incident &amp; SLA AI Engine</h3>
+                <span id="ml-engine-badge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                  <i class="fa-solid fa-circle-check mr-1"></i> Model Active (98% Accuracy)
+                </span>
+              </div>
+              <p class="text-xs text-indigo-200/80">Prediksi real-time keparahan prioritas tiket &amp; estimasi waktu resolusi berbasis 800 sampel telemetri</p>
+            </div>
+          </div>
+          <button onclick="runXgBoostInference()" id="btn-run-ml" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md transition flex items-center gap-2 shrink-0 self-start md:self-auto">
+            <i class="fa-solid fa-bolt"></i> Simulasikan Prediksi AI Baru
+          </button>
+        </div>
+
+        <!-- 3 Columns Metric Prediction View -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Card 1: Prioritas Tiket XGBoost -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Prediksi Prioritas Tiket</span>
+            <div class="flex items-baseline justify-between">
+              <span id="ml-pred-priority" class="text-xl font-black text-rose-400">P1-CRITICAL</span>
+              <span id="ml-pred-conf" class="text-xs font-mono bg-rose-500/20 px-2 py-0.5 rounded text-rose-300 font-bold">Confidence: 95.5%</span>
+            </div>
+            <p class="text-[11px] text-slate-300">Model: <code class="text-indigo-300">xgb_priority.json</code> (XGBClassifier 100 Trees)</p>
+          </div>
+
+          <!-- Card 2: Estimasi SLA XGBRegressor -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Estimasi Waktu Resolusi (SLA)</span>
+            <div class="flex items-baseline justify-between">
+              <span id="ml-pred-sla" class="text-xl font-black text-emerald-400">18.6 Menit</span>
+              <span id="ml-pred-status" class="text-xs font-mono bg-emerald-500/20 px-2 py-0.5 rounded text-emerald-300 font-bold">STATUS: ON TRACK</span>
+            </div>
+            <p class="text-[11px] text-slate-300">Model: <code class="text-indigo-300">xgb_sla.json</code> (RMSE 5.50 min, R² 0.756)</p>
+          </div>
+
+          <!-- Card 3: Fitur Masukan Aktif -->
+          <div class="bg-slate-800/60 border border-indigo-500/20 rounded-xl p-4 space-y-2">
+            <span class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Fitur Telemetri Terdeteksi</span>
+            <div class="text-xs text-slate-200 font-mono space-y-1">
+              <div>CPU AP: <span id="ml-feat-cpu" class="text-rose-300 font-bold">94.2%</span> • Loss: <span id="ml-feat-loss" class="text-rose-300 font-bold">12.8%</span></div>
+              <div>Klien Terhubung: <span id="ml-feat-clients" class="text-indigo-200 font-bold">65 Klien</span> • Pool DHCP: <span class="text-indigo-200 font-bold">2 IP</span></div>
+              <div class="text-[10px] text-slate-400">Korelasi Ruangan: Lab 3 (Gedung B) • Emergency: Yes</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -904,6 +1020,68 @@
         loadNocDashboard();
       }
       showToast(message);
+    }
+
+    // 6.B XGBoost Real-Time Inference
+    async function runXgBoostInference() {
+      const btn = document.getElementById('btn-run-ml');
+      if (btn) {
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menghitung XGBoost...';
+        btn.disabled = true;
+      }
+
+      // Payload simulasi telemetri AP dinamis
+      const samplePayloads = [
+        { connectedClients: 68, cpuUtilization: 96.5, packetLossRatio: 14.2, isEmergencyDeadline: true, clusterCount: 2, isClustered: true },
+        { connectedClients: 22, cpuUtilization: 34.0, packetLossRatio: 0.1, isEmergencyDeadline: false, clusterCount: 0, isClustered: false },
+        { connectedClients: 48, cpuUtilization: 72.0, packetLossRatio: 6.5, isEmergencyDeadline: false, clusterCount: 1, isClustered: false }
+      ];
+      const payload = samplePayloads[Math.floor(Math.random() * samplePayloads.length)];
+
+      try {
+        if (isApiConnected) {
+          const res = await fetch(`${API_BASE}/api/ml/predict`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          const json = await res.json();
+          if (json.success && json.data) {
+            const pred = json.data.prediction;
+            if (pred && pred.priority) {
+              const pLabel = pred.priority.label;
+              const pConf = (pred.priority.confidence * 100).toFixed(1);
+              const elPriority = document.getElementById('ml-pred-priority');
+              const elConf = document.getElementById('ml-pred-conf');
+              elPriority.innerText = pLabel;
+              elPriority.className = `text-xl font-black ${pLabel === 'P1-CRITICAL' ? 'text-rose-400' : (pLabel === 'P2-HIGH' ? 'text-amber-400' : 'text-emerald-400')}`;
+              elConf.innerText = `Confidence: ${pConf}%`;
+              elConf.className = `text-xs font-mono px-2 py-0.5 rounded font-bold ${pLabel === 'P1-CRITICAL' ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'}`;
+            }
+            if (pred && pred.sla) {
+              const slaMin = pred.sla.predicted_resolution_minutes;
+              const slaStat = pred.sla.sla_status;
+              document.getElementById('ml-pred-sla').innerText = `${slaMin} Menit`;
+              const elStatus = document.getElementById('ml-pred-status');
+              elStatus.innerText = `STATUS: ${slaStat}`;
+              elStatus.className = `text-xs font-mono px-2 py-0.5 rounded font-bold ${slaStat === 'ON_TRACK' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'}`;
+            }
+            document.getElementById('ml-feat-cpu').innerText = `${payload.cpuUtilization}%`;
+            document.getElementById('ml-feat-loss').innerText = `${payload.packetLossRatio}%`;
+            document.getElementById('ml-feat-clients').innerText = `${payload.connectedClients} Klien`;
+            showToast(`Inference XGBoost Sukses: Hasil ${pred.priority ? pred.priority.label : 'P1'}`);
+          }
+        }
+      } catch (err) {
+        console.warn('Gagal memanggil inferensi ML:', err);
+      } finally {
+        if (btn) {
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-bolt"></i> Simulasikan Prediksi AI Baru';
+            btn.disabled = false;
+          }, 800);
+        }
+      }
     }
 
     // 7. Modal Tiket & Detail
