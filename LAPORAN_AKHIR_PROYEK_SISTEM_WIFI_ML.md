@@ -135,3 +135,4 @@ Pengujian end-to-end mencakup 11 skenario kasus uji:
 1. Sistem berhasil mengintegrasikan pelaporan insiden darurat, analitik cerdas XGBoost, mitigasi jaringan terpusat oleh NOC, dan administrasi surat dispensasi ber-QR code dalam satu platform terpadu.
 2. Model Machine Learning XGBoost terbukti efektif dengan akurasi klasifikasi 98% dan estimasi SLA dengan RMSE 5.5 menit, menggantikan triase manual yang lambat.
 3. Seluruh komponen sistem teruji stabil, modular, dan terdokumentasi lengkap pada repository GitHub proyek.
+
