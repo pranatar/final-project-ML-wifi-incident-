@@ -360,44 +360,44 @@
           <div class="flex justify-between items-start">
             <div>
               <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Klien Terhubung</p>
-              <h3 id="stat-client-total" class="text-2xl font-black text-slate-900 mt-1">132</h3>
+              <h3 id="stat-client-total" class="text-2xl font-black text-slate-900 mt-1">0</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
               <i class="fa-solid fa-users"></i>
             </div>
           </div>
-          <p id="stat-client-ratio" class="text-xs text-slate-400 mt-2">68% di pita 5 GHz • 32% di 2.4 GHz</p>
+          <p id="stat-client-ratio" class="text-xs text-slate-400 mt-2">0% di pita 5 GHz • 0% di 2.4 GHz</p>
         </div>
 
         <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-rose-500">
           <div class="flex justify-between items-start">
             <div>
               <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiket Prioritas P1</p>
-              <h3 id="stat-ticket-p1" class="text-2xl font-black text-rose-600 mt-1">2 Laporan</h3>
+              <h3 id="stat-ticket-p1" class="text-2xl font-black text-rose-600 mt-1">0 Laporan</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-lg">
               <i class="fa-solid fa-bell"></i>
             </div>
           </div>
-          <p id="stat-ticket-p1-desc" class="text-xs text-rose-600 mt-2 font-medium">Perlu Penanganan Mendesak (&lt;15m)</p>
+          <p id="stat-ticket-p1-desc" class="text-xs text-slate-400 mt-2 font-medium">Tidak ada tiket tertunda</p>
         </div>
 
         <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm border-l-4 border-l-emerald-500">
           <div class="flex justify-between items-start">
             <div>
               <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tiket Terselesaikan</p>
-              <h3 id="stat-ticket-resolved" class="text-2xl font-black text-emerald-600 mt-1">3 Tiket</h3>
+              <h3 id="stat-ticket-resolved" class="text-2xl font-black text-emerald-600 mt-1">0 Tiket</h3>
             </div>
             <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
               <i class="fa-solid fa-circle-check"></i>
             </div>
           </div>
-          <p class="text-xs text-emerald-700 mt-2 font-bold">Rata-rata Resolusi: 8.5 Menit</p>
+          <p id="stat-avg-resolution" class="text-xs text-emerald-700 mt-2 font-bold">Rata-rata Resolusi: 0 Menit</p>
         </div>
       </div>
 
       <!-- Alert Insiden Massal Aktif (Dinamis) -->
-      <div id="noc-urgent-banner" class="bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
+      <div id="noc-urgent-banner" class="hidden bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-sm">
         <div class="flex items-start gap-3">
           <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-xl shrink-0 mt-0.5">
             <i class="fa-solid fa-triangle-exclamation animate-bounce"></i>
@@ -901,18 +901,23 @@
       if (isIT) {
         roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-600 text-white';
         roleBadge.innerText = 'TIM IT NOC';
-        // IT melihat semua tab termasuk Dashboard NOC
+        // IT HANYA melihat Dashboard NOC & Surat Bukti Approval (Form Mahasiswa disembunyikan total)
+        tabStudent.classList.add('hidden');
         tabNoc.classList.remove('hidden');
-        tabStudent.innerHTML = '<i class="fa-solid fa-mobile-screen"></i> 1. Form Mahasiswa';
-        tabNoc.innerHTML = '<i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC';
-        tabCert.innerHTML = '<i class="fa-solid fa-file-contract"></i> 3. Surat Bukti & Approval';
+        tabCert.classList.remove('hidden');
+        
+        tabNoc.innerHTML = '<i class="fa-solid fa-gauge-high"></i> 1. Dashboard NOC';
+        tabCert.innerHTML = '<i class="fa-solid fa-file-contract"></i> 2. Surat Bukti & Approval';
         if (btnApprove) btnApprove.classList.remove('hidden');
         switchScreen('noc');
       } else {
         roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white';
         roleBadge.innerText = 'MAHASISWA';
-        // Mahasiswa TIDAK boleh melihat Dashboard NOC (Security Rule & Permintaan Pengguna)
+        // Mahasiswa HANYA melihat Form Lapor & Surat Bukti miliknya (Dashboard NOC disembunyikan total)
+        tabStudent.classList.remove('hidden');
         tabNoc.classList.add('hidden');
+        tabCert.classList.remove('hidden');
+
         tabStudent.innerHTML = '<i class="fa-solid fa-mobile-screen"></i> 1. Form Lapor Masalah';
         tabCert.innerHTML = '<i class="fa-solid fa-file-contract"></i> 2. Surat Bukti Resmi (PDF)';
         if (btnApprove) btnApprove.classList.add('hidden');
@@ -980,9 +985,14 @@
     function switchScreen(screen) {
       const isIT = currentUser && (currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT');
       
-      // Keamanan: Mahasiswa dilarang keras membuka screen NOC
+      // Keamanan & Pembagian Peran:
+      // Mahasiswa dilarang keras membuka screen NOC
       if (screen === 'noc' && !isIT) {
         screen = 'student';
+      }
+      // Tim IT tidak membuka screen student (form pelaporan mahasiswa)
+      if (screen === 'student' && isIT) {
+        screen = 'noc';
       }
 
       document.getElementById('screen-student').classList.add('hidden');
@@ -997,13 +1007,15 @@
       tabCert.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
 
       if (isIT) {
+        tabStudent.classList.add('hidden'); // Tim IT tidak melihat tab mahasiswa
         tabNoc.classList.remove('hidden');
         tabNoc.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
       } else {
-        tabNoc.classList.add('hidden');
+        tabStudent.classList.remove('hidden');
+        tabNoc.classList.add('hidden'); // Mahasiswa tidak melihat tab NOC
       }
 
-      if (screen === 'student') {
+      if (screen === 'student' && !isIT) {
         document.getElementById('screen-student').classList.remove('hidden');
         tabStudent.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
       } else if (screen === 'noc' && isIT) {

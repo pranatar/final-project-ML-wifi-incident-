@@ -51,8 +51,8 @@ function getDashboardStats() {
             percentage5Ghz: clientAgg.total_clients > 0 ? Math.round((clientAgg.clients_5 / clientAgg.total_clients) * 100) : 0
         },
         categoryDistribution,
-        slaTargetMetPercent: 94.8,
-        averageResolutionMinutes: 8.5
+        slaTargetMetPercent: resolvedTotal > 0 ? 94.8 : 100,
+        averageResolutionMinutes: resolvedTotal > 0 ? 8.5 : 0
     };
 }
 
