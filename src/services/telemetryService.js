@@ -45,20 +45,36 @@ function executeRemediation({ apMac, operatorId, actionType = 'DYNAMIC_LOAD_BALA
 
     const opId = operatorId || 'NOC-002';
     let newStatus = 'ONLINE';
-    let newClients = 28;
     let newLoss = 0.0;
-    let newLatency = 11.2;
-    let newCpu = 38.5;
-    let newDhcp = 145;
+    let newLatency = 4.0;
+    let newCpu = 15.0;
+    let newDhcp = 250;
     let actionSummary = '';
 
+    // Ambil jumlah klien yang saat ini terhubung ke AP ini dari log telemetri terbaru
+    const latestTele = db.prepare(`
+        SELECT connected_clients, clients_24ghz, clients_5ghz 
+        FROM log_telemetri_ap 
+        WHERE ap_mac = ? 
+        ORDER BY id_log DESC LIMIT 1
+    `).get(apMac);
+
+    const currentClients = latestTele ? latestTele.connected_clients : 0;
+    // Jika AP overload (>40 klien), kurangi bebannya; jika kondisi normal/nol, tetap pertahankan riil (tidak memunculkan 28 fiktif)
+    let newClients = currentClients > 40 ? Math.round(currentClients * 0.4) : currentClients;
+    let clients5 = Math.round(newClients * 0.7);
+    let clients24 = newClients - clients5;
+
     if (actionType === 'DYNAMIC_LOAD_BALANCING') {
-        actionSummary = 'Dynamic Client Steering & Load Balancing diaktifkan: 37 klien dialihkan ke AP-Koridor. Latensi gateway turun ke 11ms, packet loss 0%.';
+        const redirected = currentClients > newClients ? (currentClients - newClients) : 0;
+        actionSummary = redirected > 0 
+            ? `Dynamic Client Steering & Load Balancing diaktifkan: ${redirected} klien dialihkan ke AP lain. Latensi gateway normal, packet loss 0%.`
+            : `Band Steering 5GHz diaktifkan pada ${ap.ap_name}. Kanal radio dan beban klien optimal.`;
     } else if (actionType === 'DHCP_FLUSH') {
         actionSummary = 'Flushed stale DHCP leases & expanded pool subnet /23. Sisa pool IP bertambah menjadi 250 alamat.';
         newDhcp = 250;
     } else if (actionType === 'RF_TUNING') {
-        actionSummary = 'Tuned RF channel 5GHz ke 44 (non-interfering) & optimasi Tx Power 18 dBm.';
+        actionSummary = 'Tuned RF channel 5GHz ke kanal bersih (non-interfering) & optimasi Tx Power 18 dBm.';
     } else {
         actionSummary = `Tindakan remediasi teknis: ${actionType} berhasil dieksekusi.`;
     }
@@ -76,8 +92,8 @@ function executeRemediation({ apMac, operatorId, actionType = 'DYNAMIC_LOAD_BALA
             ap_mac, connected_clients, clients_24ghz, clients_5ghz,
             cpu_utilization, memory_utilization, packet_loss_ratio,
             latency_gateway_ms, dhcp_pool_remaining
-        ) VALUES (?, ?, 8, 20, ?, 42.0, ?, ?, ?)
-    `).run(apMac, newClients, newCpu, newLoss, newLatency, newDhcp);
+        ) VALUES (?, ?, ?, ?, ?, 25.0, ?, ?, ?)
+    `).run(apMac, newClients, clients24, clients5, newCpu, newLoss, newLatency, newDhcp);
 
     // 3. Update semua tiket aktif yang tertaut ke AP atau ruangan tersebut ke status 'RESOLVED'
     const affectedTickets = db.prepare(`
