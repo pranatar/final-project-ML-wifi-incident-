@@ -74,8 +74,8 @@ async function handleApiRequest(req, res) {
                     message: 'Login Tim IT Berhasil',
                     user: {
                         userId: userId || 'NOC-002',
-                        nama: 'Rian Pratama, S.Kom. (IT NOC)',
-                        email: 'rian.noc@univ.ac.id',
+                        nama: 'Rian Pratama, S.Kom. (IT NOC UNKLAB)',
+                        email: 'rian.noc@unklab.ac.id',
                         peran: 'Network_NOC_L2'
                     }
                 });
@@ -84,14 +84,14 @@ async function handleApiRequest(req, res) {
                     return sendJson(400, { success: false, error: 'NIM Mahasiswa wajib diisi!' });
                 }
                 const cleanNim = String(userId).trim();
-                const studentName = nama && nama.trim() ? nama.trim() : `Mahasiswa (${cleanNim})`;
+                const studentName = nama && nama.trim() ? nama.trim() : `Mahasiswa UNKLAB (${cleanNim})`;
                 return sendJson(200, {
                     success: true,
                     message: 'Login Mahasiswa Berhasil',
                     user: {
                         userId: cleanNim,
                         nama: studentName,
-                        email: `${cleanNim}@student.univ.ac.id`,
+                        email: `${cleanNim}@student.unklab.ac.id`,
                         peran: 'Mahasiswa'
                     }
                 });

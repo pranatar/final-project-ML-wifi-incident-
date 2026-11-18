@@ -168,7 +168,7 @@ async function runTests() {
     let verificationToken = null;
     await test('POST /api/dispensations (Penerbitan Surat Dispensasi Resmi)', async () => {
         const payload = {
-            noTiket: 'TKT-202611-0042',
+            noTiket: ticket1No,
             namaMataKuliah: 'Jaringan Komputer Lanjut',
             namaDosen: 'Dr. Eng. Wahyu Pratama, M.Kom.'
         };

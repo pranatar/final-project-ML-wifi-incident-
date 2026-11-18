@@ -304,29 +304,29 @@
             <div>
               <label class="block text-xs font-bold text-slate-700 mb-1">Identitas Mahasiswa</label>
               <div class="grid grid-cols-2 gap-2">
-                <input type="text" id="stu-nim" value="220101089" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none" placeholder="NIM Mahasiswa">
-                <input type="text" id="stu-name" value="Ahmad Fauzi" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Lengkap">
+                <input type="text" id="stu-nim" value="" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-mono focus:ring-2 focus:ring-blue-500 outline-none" placeholder="NIM Mahasiswa">
+                <input type="text" id="stu-name" value="" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Lengkap">
               </div>
             </div>
 
             <!-- Dropdown Lokasi Ruangan (Dinamis dari Database) -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Ruangan Terkait (Wajib)</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Lokasi Ruangan Terkait di UNKLAB (Wajib)</label>
               <select id="stu-room-select" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white font-bold text-blue-700 focus:ring-2 focus:ring-blue-500 outline-none">
-                <option value="GD-B-LT2-LAB03" selected>Gedung B - Lantai 2 (Lab Komputer 3)</option>
-                <option value="GD-B-LT2-LAB01">Gedung B - Lantai 2 (Lab Komputer 1)</option>
-                <option value="GD-A-LT1-R101">Gedung A - Lantai 1 (Ruang Kuliah 101)</option>
-                <option value="GD-C-LT3-LAB02">Gedung C - Lantai 3 (Lab Jaringan & IoT)</option>
-                <option value="GD-LIB-LT1-MAIN">Perpustakaan Pusat - Lantai 1</option>
+                <option value="GD-B-LT2-LAB03" selected>Gedung FIK - Lantai 2 (Lab Komputer 3)</option>
+                <option value="GD-B-LT2-LAB01">Gedung FIK - Lantai 2 (Lab Pemrograman 1)</option>
+                <option value="GD-A-LT1-R101">Auditorium Pioneer Chapel - Lantai 1</option>
+                <option value="GD-C-LT3-LAB02">Gedung GK2 - Lantai 3 (Lab Jaringan)</option>
+                <option value="GD-LIB-LT1-MAIN">Fernandez Memorial Library - Lantai 1</option>
               </select>
             </div>
 
             <!-- Mata Kuliah & Dosen -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 mb-1">Mata Kuliah & Dosen Pengampu</label>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Mata Kuliah &amp; Dosen Pengampu</label>
               <div class="space-y-1.5">
-                <input type="text" id="stu-course" value="Jaringan Komputer Lanjut" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Mata Kuliah">
-                <input type="text" id="stu-lecturer" value="Dr. Eng. Wahyu Pratama, M.Kom." class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Dosen">
+                <input type="text" id="stu-course" value="Jaringan Komputer &amp; Komunikasi Data" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Mata Kuliah">
+                <input type="text" id="stu-lecturer" value="Dosen Pengampu FIK UNKLAB" class="w-full text-xs px-2.5 py-2 rounded-lg border border-slate-300 bg-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Nama Dosen">
               </div>
             </div>
 
@@ -366,8 +366,8 @@
           <div id="student-tracker-state" class="hidden space-y-4">
             <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-center">
               <span class="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Nomor Tiket Aduan</span>
-              <h4 id="tracker-ticket-id" class="text-base font-extrabold text-blue-900 font-mono">#TKT-202611-0042</h4>
-              <p id="tracker-location-text" class="text-[11px] text-blue-700 mt-0.5">Lokasi: Gedung B - Lab Komputer 3</p>
+              <h4 id="tracker-ticket-id" class="text-base font-extrabold text-blue-900 font-mono">#TKT-Menunggu</h4>
+              <p id="tracker-location-text" class="text-[11px] text-blue-700 mt-0.5">Lokasi: UNKLAB</p>
               <span id="tracker-priority-badge" class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-rose-600 text-white uppercase">
                 P1-CRITICAL
               </span>
@@ -556,9 +556,9 @@
               <span class="px-2 py-0.5 rounded bg-rose-600 text-white text-[10px] font-black uppercase">P1 URGENT - KORELASI MASSAL</span>
               <span class="text-xs font-semibold text-slate-500">Auto-Clustering Aktif</span>
             </div>
-            <h4 id="noc-banner-title" class="text-base font-bold text-slate-900 mt-0.5">Beban Kritis Terdeteksi di Lab Komputer 3 (Gedung B)</h4>
+            <h4 id="noc-banner-title" class="text-base font-bold text-slate-900 mt-0.5">Beban Kritis Terdeteksi di Lab Komputer FIK UNKLAB</h4>
             <p id="noc-banner-desc" class="text-xs text-slate-600">
-              Multiple mahasiswa melaporkan kegagalan koneksi. AP-GedB-L2-01 mengalami beban tinggi.
+              Multiple mahasiswa melaporkan kegagalan koneksi. AP-FIK-L2-Lab3 mengalami beban tinggi.
             </p>
           </div>
         </div>
@@ -717,7 +717,7 @@
       <div class="no-print max-w-3xl mx-auto mb-4 flex flex-col sm:flex-row justify-between items-center gap-3 bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
         <div class="flex items-center gap-3">
           <div>
-            <span class="text-xs font-bold text-slate-700">Dokumen Digital Resmi UPT TIK</span>
+            <span class="text-xs font-bold text-slate-700">Dokumen Digital Resmi UPT TIK UNKLAB</span>
             <p class="text-[11px] text-slate-400">Bukti keabsahan kendala jaringan untuk Dosen Pengampu Tugas</p>
           </div>
           <!-- Selector Tiket untuk Surat -->
@@ -735,27 +735,43 @@
         </div>
       </div>
 
+      <!-- State Kosong: Belum ada surat yang diterbitkan -->
+      <div id="cert-empty-state" class="no-print max-w-3xl mx-auto bg-white border border-slate-200 rounded-2xl p-10 text-center shadow-sm space-y-3">
+        <div class="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto text-2xl shadow-inner">
+          <i class="fa-solid fa-file-circle-question"></i>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">Belum Ada Surat Keterangan yang Diterbitkan</h3>
+        <p class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
+          Surat dispensasi resmi ber-QR Code akan otomatis terbit saat mahasiswa mengirim laporan gangguan Wi-Fi dan Tim IT menyelesaikan penanganan teknisnya.
+        </p>
+        <div class="pt-2">
+          <span class="inline-flex items-center gap-1.5 text-xs text-indigo-700 bg-indigo-50 border border-indigo-200 px-3 py-1.5 rounded-xl font-medium">
+            <i class="fa-solid fa-circle-info"></i> Menunggu laporan masuk atau demo dari mahasiswa...
+          </span>
+        </div>
+      </div>
+
       <!-- Formal Letter Paper (A4 Style) -->
-      <div class="max-w-3xl mx-auto bg-white border border-slate-300 rounded-xl p-8 sm:p-12 shadow-lg space-y-6 text-slate-900">
+      <div id="cert-letter-paper" class="hidden max-w-3xl mx-auto bg-white border border-slate-300 rounded-xl p-8 sm:p-12 shadow-lg space-y-6 text-slate-900">
         
-        <!-- Kop Surat Resmi Kampus -->
+        <!-- Kop Surat Resmi Kampus UNKLAB -->
         <div class="border-b-4 border-double border-slate-900 pb-4 text-center space-y-1">
-          <h4 class="text-xs uppercase tracking-widest font-bold text-slate-700">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</h4>
-          <h2 class="text-lg sm:text-xl font-black tracking-wide text-slate-950 uppercase">UNIVERSITAS TEKNOLOGI KAMPUS TERPADU</h2>
+          <h4 class="text-xs uppercase tracking-widest font-bold text-slate-700">YAYASAN PERGURUAN TINGGI MASEHI ADVEN</h4>
+          <h2 class="text-lg sm:text-xl font-black tracking-wide text-blue-950 uppercase">UNIVERSITAS KLABAT (UNKLAB)</h2>
           <h3 class="text-xs font-bold text-blue-900 uppercase tracking-wider">UNIT PELAKSANA TEKNIS TEKNOLOGI INFORMASI DAN KOMUNIKASI (UPT TIK)</h3>
-          <p class="text-[10px] text-slate-500">Gedung Rektorat Lt. 2, Kampus Terpadu • Email: helpdesk.tik@univ.ac.id • Web: tik.univ.ac.id</p>
+          <p class="text-[10px] text-slate-500">Jl. Arnold Mononutu, Airmadidi, Minahasa Utara, Sulawesi Utara 95371 • Email: it@unklab.ac.id • Web: www.unklab.ac.id</p>
         </div>
 
         <!-- Judul & Nomor Surat -->
         <div class="text-center space-y-1 pt-2">
           <h3 class="text-sm font-extrabold tracking-wider underline uppercase">SURAT KETERANGAN GANGGUAN TEKNIS JARINGAN WI-FI</h3>
-          <p id="cert-number-text" class="text-xs font-mono text-slate-600">Nomor: 421.3/UPT-TIK/SK-GANGGUAN/XI/2026-0042</p>
+          <p id="cert-number-text" class="text-xs font-mono text-slate-600">Nomor: 421.3/UNKLAB-TIK/SK-GANGGUAN/XI/2026-0001</p>
         </div>
 
         <!-- Isi Pengantar -->
         <div class="text-xs leading-relaxed text-justify space-y-2">
           <p>
-            Dengan ini, Kepala Unit Pelaksana Teknis Teknologi Informasi dan Komunikasi (UPT TIK) menerangkan secara resmi bahwa berdasarkan catatan telemetri sistem pemantauan nirkabel dan log tiket helpdesk:
+            Dengan ini, Kepala Unit Pelaksana Teknis Teknologi Informasi dan Komunikasi (UPT TIK) Universitas Klabat menerangkan secara resmi bahwa berdasarkan catatan telemetri sistem pemantauan nirkabel dan log tiket helpdesk:
           </p>
         </div>
 
@@ -764,31 +780,31 @@
           <tbody>
             <tr class="border-b border-slate-200 bg-slate-50">
               <td class="p-2.5 font-bold w-1/3 text-slate-700">Nama Mahasiswa</td>
-              <td id="cert-student-name" class="p-2.5 font-semibold text-slate-900">Ahmad Fauzi</td>
+              <td id="cert-student-name" class="p-2.5 font-semibold text-slate-900">-</td>
             </tr>
             <tr class="border-b border-slate-200">
               <td class="p-2.5 font-bold text-slate-700">Nomor Induk Mahasiswa (NIM)</td>
-              <td id="cert-student-nim" class="p-2.5 font-mono text-slate-900">220101089</td>
+              <td id="cert-student-nim" class="p-2.5 font-mono text-slate-900">-</td>
             </tr>
             <tr class="border-b border-slate-200 bg-slate-50">
               <td class="p-2.5 font-bold text-slate-700">Lokasi Kejadian</td>
-              <td id="cert-room-location" class="p-2.5 text-slate-900">Gedung B (Fakultas Teknik) - Lantai 2, Lab Komputer 3</td>
+              <td id="cert-room-location" class="p-2.5 text-slate-900">-</td>
             </tr>
             <tr class="border-b border-slate-200">
               <td class="p-2.5 font-bold text-slate-700">Mata Kuliah & Dosen</td>
-              <td id="cert-course-info" class="p-2.5 text-slate-900">Jaringan Komputer Lanjut (Dr. Eng. Wahyu Pratama, M.Kom.)</td>
+              <td id="cert-course-info" class="p-2.5 text-slate-900">-</td>
             </tr>
             <tr class="border-b border-slate-200 bg-slate-50">
               <td class="p-2.5 font-bold text-slate-700">Nomor Tiket Terverifikasi</td>
-              <td id="cert-ticket-id" class="p-2.5 font-mono font-bold text-blue-800">#TKT-202611-0042 (Status: Resolved)</td>
+              <td id="cert-ticket-id" class="p-2.5 font-mono font-bold text-blue-800">-</td>
             </tr>
             <tr class="border-b border-slate-200">
               <td class="p-2.5 font-bold text-slate-700">Waktu Terjadinya Gangguan</td>
-              <td id="cert-time-span" class="p-2.5 text-slate-900">04 November 2026, Pukul 09:38 WIB s/d 09:55 WIB (Durasi: 17 Menit)</td>
+              <td id="cert-time-span" class="p-2.5 text-slate-900">-</td>
             </tr>
             <tr class="border-b border-slate-200 bg-slate-50">
               <td class="p-2.5 font-bold text-slate-700">Akar Masalah (RCA)</td>
-              <td id="cert-rca-desc" class="p-2.5 text-slate-800">Access Point Overload (&gt;65 klien aktif) & Kehabisan Pool Alamat IP DHCP saat sesi submit daring serentak.</td>
+              <td id="cert-rca-desc" class="p-2.5 text-slate-800">Access Point Overload &amp; Gagal Alokasi DHCP IP Lease pada saat sesi submit tugas LMS serentak.</td>
             </tr>
             <tr>
               <td class="p-2.5 font-bold text-slate-700">Status Persetujuan Dosen</td>
@@ -803,7 +819,7 @@
         <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 text-xs text-slate-800 space-y-1">
           <p class="font-bold text-blue-900">Rekomendasi Akademik kepada Dosen Pengampu:</p>
           <p class="leading-relaxed">
-            Sehubungan dengan insiden kegagalan transmisi data di atas yang terbukti berada di luar kendali mahasiswa bersangkutan, UPT TIK merekomendasikan pemberian <b>dispensasi perpanjangan waktu pengumpulan</b> atau pembukaan kembali slot tugas daring di LMS selama <b>minimal 30 menit</b> sejak surat ini diterbitkan.
+            Sehubungan dengan insiden kegagalan transmisi data di atas yang terbukti berada di luar kendali mahasiswa bersangkutan, UPT TIK Universitas Klabat merekomendasikan pemberian <b>dispensasi perpanjangan waktu pengumpulan</b> atau pembukaan kembali slot tugas daring di e-Learning / LMS selama <b>minimal 30 menit</b> sejak surat ini diterbitkan.
           </p>
         </div>
 
@@ -819,14 +835,14 @@
 
           <!-- Official Signature Box -->
           <div class="text-center space-y-1 text-xs">
-            <p class="text-slate-600">Dikeluarkan di: Kampus Terpadu</p>
-            <p id="cert-issued-date" class="text-slate-600">Pada tanggal: 04 November 2026</p>
-            <p class="font-bold text-slate-800 mt-2">Kepala UPT TIK,</p>
+            <p class="text-slate-600">Dikeluarkan di: Kampus UNKLAB, Airmadidi</p>
+            <p id="cert-issued-date" class="text-slate-600">Pada tanggal: -</p>
+            <p class="font-bold text-slate-800 mt-2">Kepala UPT TIK Universitas Klabat,</p>
             <div class="py-4 text-blue-900 font-serif italic text-sm font-bold opacity-80">
-              [Tanda Tangan Digital Tersertifikasi]
+              [Tanda Tangan Digital Tersertifikasi UNKLAB]
             </div>
-            <p class="font-bold underline text-slate-900">Ir. H. Hendra Wijaya, M.T., CCNA</p>
-            <p class="text-[10px] text-slate-500 font-mono">NIP. 19780415 200501 1 002</p>
+            <p class="font-bold underline text-slate-900">Direktur IT &amp; Sistem Informasi UNKLAB</p>
+            <p class="text-[10px] text-slate-500 font-mono">NIP/ID. UNKLAB-TIK-2026</p>
           </div>
         </div>
 
@@ -884,7 +900,7 @@
             <div class="text-xs text-slate-200 font-mono space-y-1">
               <div>CPU AP: <span id="ml-feat-cpu" class="text-rose-300 font-bold">94.2%</span> • Loss: <span id="ml-feat-loss" class="text-rose-300 font-bold">12.8%</span></div>
               <div>Klien Terhubung: <span id="ml-feat-clients" class="text-indigo-200 font-bold">65 Klien</span> • Pool DHCP: <span class="text-indigo-200 font-bold">2 IP</span></div>
-              <div class="text-[10px] text-slate-400">Korelasi Ruangan: Lab 3 (Gedung B) • Emergency: Yes</div>
+              <div class="text-[10px] text-slate-400">Korelasi Ruangan: Lab 3 FIK UNKLAB • Emergency: Yes</div>
             </div>
           </div>
         </div>
@@ -901,17 +917,17 @@
       <div class="flex justify-between items-start border-b border-slate-100 pb-3">
         <div>
           <span id="modal-priority-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-rose-600 text-white uppercase">P1-CRITICAL</span>
-          <h3 id="modal-ticket-id" class="text-lg font-black text-slate-900 font-mono mt-1">#TKT-202611-0042</h3>
+          <h3 id="modal-ticket-id" class="text-lg font-black text-slate-900 font-mono mt-1">#TKT-</h3>
         </div>
         <button onclick="closeTicketModal()" class="text-slate-400 hover:text-slate-600 text-lg">✕</button>
       </div>
 
       <div class="space-y-2 text-xs text-slate-700">
-        <p><b>Pelapor:</b> <span id="modal-pelapor">Ahmad Fauzi (220101089)</span></p>
-        <p><b>Lokasi:</b> <span id="modal-lokasi">Gedung B - Lab Komputer 3</span></p>
-        <p><b>Mata Kuliah:</b> <span id="modal-mk">Jaringan Komputer Lanjut</span></p>
-        <p><b>Gejala:</b> <span id="modal-gejala">Koneksi putus saat upload tugas</span></p>
-        <p><b>Status Saat Ini:</b> <span id="modal-status" class="font-bold text-blue-700">ESCALATED_NOC</span></p>
+        <p><b>Pelapor:</b> <span id="modal-pelapor">-</span></p>
+        <p><b>Lokasi:</b> <span id="modal-lokasi">-</span></p>
+        <p><b>Mata Kuliah:</b> <span id="modal-mk">-</span></p>
+        <p><b>Gejala:</b> <span id="modal-gejala">-</span></p>
+        <p><b>Status Saat Ini:</b> <span id="modal-status" class="font-bold text-blue-700">OPEN</span></p>
       </div>
 
       <!-- Riwayat Tindakan -->
@@ -1605,6 +1621,9 @@
     // 8. Logika Surat Keterangan Resmi (Screen 3)
     async function populateCertificateDropdown() {
       const select = document.getElementById('cert-ticket-select');
+      const emptyState = document.getElementById('cert-empty-state');
+      const letterPaper = document.getElementById('cert-letter-paper');
+      const btnApprove = document.getElementById('btn-approve-cert');
       select.innerHTML = '';
       
       let ticketsToShow = allTicketsCache;
@@ -1623,10 +1642,21 @@
         }
       }
 
-      if (!ticketsToShow.length) {
-        select.innerHTML = '<option value="">Belum ada tiket yang diajukan</option>';
+      if (!ticketsToShow || !ticketsToShow.length) {
+        select.innerHTML = '<option value="">(Belum ada tiket insiden)</option>';
+        if (emptyState) emptyState.classList.remove('hidden');
+        if (letterPaper) letterPaper.classList.add('hidden');
+        if (btnApprove) btnApprove.classList.add('hidden');
         return;
       }
+
+      // Jika ada tiket, tampilkan lembar surat
+      if (emptyState) emptyState.classList.add('hidden');
+      if (letterPaper) letterPaper.classList.remove('hidden');
+      if (btnApprove && currentUser && currentUser.peran !== 'Mahasiswa') {
+        btnApprove.classList.remove('hidden');
+      }
+
       ticketsToShow.forEach(t => {
         const opt = document.createElement('option');
         opt.value = t.no_tiket;
@@ -1639,6 +1669,7 @@
     }
 
     async function generateCertificateForTicket(noTiket) {
+      if (!noTiket) return;
       try {
         const res = await fetch(`${API_BASE}/api/dispensations`, {
           method: 'POST',
@@ -1647,6 +1678,10 @@
         });
         const json = await res.json();
         if (json.success && json.data) {
+          const emptyState = document.getElementById('cert-empty-state');
+          const letterPaper = document.getElementById('cert-letter-paper');
+          if (emptyState) emptyState.classList.add('hidden');
+          if (letterPaper) letterPaper.classList.remove('hidden');
           renderCertificateView(json.data);
         }
       } catch (err) {
@@ -1659,19 +1694,23 @@
     }
 
     function openCertificateForCurrentTicket() {
-      const ticketId = currentActiveTicket?.no_tiket || 'TKT-202611-0042';
+      if (!currentActiveTicket?.no_tiket) {
+        showToast('Anda belum mengirim tiket insiden.');
+        return;
+      }
       switchScreen('certificate');
-      generateCertificateForTicket(ticketId);
+      generateCertificateForTicket(currentActiveTicket.no_tiket);
     }
 
     function renderCertificateView(cert) {
-      document.getElementById('cert-number-text').innerText = `Nomor: ${cert.no_surat}`;
-      document.getElementById('cert-student-name').innerText = cert.nama_mahasiswa || 'Ahmad Fauzi';
-      document.getElementById('cert-student-nim').innerText = cert.nim_mahasiswa || cert.user_id || '220101089';
-      document.getElementById('cert-room-location').innerText = `${cert.nama_gedung || 'Gedung B'} - ${cert.nama_ruangan || 'Lab Komputer 3'}`;
-      document.getElementById('cert-course-info').innerText = `${cert.nama_mata_kuliah} (${cert.nama_dosen})`;
+      document.getElementById('cert-number-text').innerText = `Nomor: ${cert.no_surat || '421.3/UNKLAB-TIK/SK-GANGGUAN/XI/2026-0001'}`;
+      document.getElementById('cert-student-name').innerText = cert.nama_mahasiswa || '-';
+      document.getElementById('cert-student-nim').innerText = cert.nim_mahasiswa || cert.user_id || '-';
+      document.getElementById('cert-room-location').innerText = `${cert.nama_gedung || 'Fakultas Ilmu Komputer (FIK)'} - ${cert.nama_ruangan || 'Lab Komputer 3'}`;
+      document.getElementById('cert-course-info').innerText = `${cert.nama_mata_kuliah || '-'} (${cert.nama_dosen || '-'})`;
       document.getElementById('cert-ticket-id').innerText = `#${cert.no_tiket} (Status: ${cert.status_tiket || 'RESOLVED'})`;
       document.getElementById('cert-time-span').innerText = `${cert.waktu_mulai_gangguan} s/d ${cert.waktu_selesai_gangguan}`;
+      document.getElementById('cert-issued-date').innerText = `Pada tanggal: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`;
       
       const qrData = encodeURIComponent(cert.url_qr_verification || `http://localhost:3000/api/dispensations/verify/${cert.token_verifikasi}`);
       document.getElementById('cert-qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=90x90&data=${qrData}`;
