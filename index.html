@@ -1381,25 +1381,49 @@
         const isOverload = ap.status_operasional === 'OVERLOADED';
         const clientCount = ap.connected_clients || 0;
         const loss = ap.packet_loss_ratio || 0;
-        const latency = ap.latency_gateway_ms || 5;
+        const latency = ap.latency_gateway_ms || 4.0;
         const percent = Math.min(Math.round((clientCount / (ap.max_client_limit || 50)) * 100), 100);
 
+        // Estimasi kecepatan bandwidth riil berdasarkan latensi dan loss
+        let speedEst = "150 Mbps";
+        let speedColor = "text-emerald-600";
+        if (loss > 10 || latency > 100) {
+          speedEst = "< 1.5 Mbps (Drop)";
+          speedColor = "text-rose-600 font-black";
+        } else if (loss > 0 || latency > 40) {
+          speedEst = "~ 18 Mbps (Degraded)";
+          speedColor = "text-amber-600 font-bold";
+        } else if (clientCount > 0) {
+          speedEst = "~ 85 Mbps (Normal)";
+        } else {
+          speedEst = "Optimal (Standby)";
+          speedColor = "text-slate-400 font-medium";
+        }
+
         const card = document.createElement('div');
-        card.className = `p-4 rounded-xl border-2 ${isOverload ? 'border-rose-500 bg-rose-50/60' : 'border-slate-200 bg-slate-50 hover:border-slate-300'} transition`;
+        card.className = `p-4 rounded-xl border-2 ${isOverload ? 'border-rose-500 bg-rose-50/60 shadow-md' : 'border-slate-200 bg-slate-50 hover:border-slate-300'} transition`;
         card.innerHTML = `
           <div class="flex justify-between items-start">
-            <span class="text-xs font-bold ${isOverload ? 'text-rose-900' : 'text-slate-700'}">${ap.nama_ruangan}</span>
-            <span class="px-1.5 py-0.5 rounded ${isOverload ? 'bg-rose-600 text-white' : 'bg-emerald-100 text-emerald-800'} text-[9px] font-black uppercase">
+            <div>
+              <span class="text-xs font-bold ${isOverload ? 'text-rose-900' : 'text-slate-700'}">${ap.nama_ruangan}</span>
+              <p class="text-[10px] text-slate-400 font-medium">${ap.nama_gedung || ''}</p>
+            </div>
+            <span class="px-1.5 py-0.5 rounded ${isOverload ? 'bg-rose-600 text-white animate-pulse' : 'bg-emerald-100 text-emerald-800'} text-[9px] font-black uppercase">
               ${ap.status_operasional}
             </span>
           </div>
-          <p class="text-[11px] ${isOverload ? 'text-rose-600 font-mono' : 'text-slate-400'} mt-1">${ap.ap_name}</p>
+          <p class="text-[11px] ${isOverload ? 'text-rose-600 font-mono font-bold' : 'text-slate-400'} mt-1 flex items-center gap-1">
+            <i class="fa-solid fa-wifi text-[10px]"></i> ${ap.ap_name}
+          </p>
           <div class="mt-3 flex items-baseline justify-between">
             <span class="text-lg font-black ${isOverload ? 'text-rose-700' : 'text-slate-800'}">${clientCount} Klien</span>
-            <span class="text-[11px] ${isOverload ? 'text-rose-600 font-bold' : 'text-emerald-600 font-semibold'}">Loss: ${loss}% • ${latency}ms</span>
+            <div class="text-right">
+              <span class="text-[11px] ${isOverload ? 'text-rose-600 font-bold' : 'text-emerald-600 font-semibold'}">Loss: ${loss}% • Ping: ${latency}ms</span>
+              <div class="text-[10px] ${speedColor} mt-0.5">Speed: ${speedEst}</div>
+            </div>
           </div>
           <div class="w-full bg-slate-200 h-1.5 rounded-full mt-2 overflow-hidden">
-            <div class="${isOverload ? 'bg-rose-600' : 'bg-emerald-500'} h-1.5 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+            <div class="${isOverload ? 'bg-rose-600' : 'bg-emerald-500'} h-1.5 rounded-full transition-all duration-500" style="width: ${percent || (clientCount > 0 ? 5 : 0)}%"></div>
           </div>
         `;
         container.appendChild(card);

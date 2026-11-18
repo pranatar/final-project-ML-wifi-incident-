@@ -210,6 +210,54 @@ function createTicket(data) {
         VALUES (?, 'HD-001', 'Incident Triaging', ?)
     `).run(noTiket, actionDesc);
 
+    // 7. Update Telemetri AP & Beban Klien Secara Nyata Berdasarkan Laporan Masuk
+    if (apMac) {
+        try {
+            // Ambil data telemetri terakhir
+            const lastTele = db.prepare(`
+                SELECT * FROM log_telemetri_ap WHERE ap_mac = ? ORDER BY id_log DESC LIMIT 1
+            `).get(apMac);
+
+            const prevClients = lastTele ? lastTele.connected_clients : 0;
+            const newClients = prevClients + 1; // Tiap mahasiswa melapor menambah hitungan klien riil
+            const clients5 = Math.round(newClients * 0.7);
+            const clients24 = newClients - clients5;
+            
+            // Pengaruh jenis keluhan terhadap telemetri
+            let loss = 0.0;
+            let latency = 4.5;
+            let cpu = 15.0 + (newClients * 1.5);
+            let pool = 250 - newClients;
+
+            const symptom = (data.gejalaGangguan || '').toLowerCase();
+            if (symptom.includes('putus') || symptom.includes('hilang') || symptom.includes('loss')) {
+                loss = isClustered ? 12.8 : 4.5;
+                latency = isClustered ? 145.0 : 45.0;
+                cpu = isClustered ? 92.0 : 65.0;
+            } else if (symptom.includes('dhcp') || symptom.includes('ip')) {
+                pool = 0;
+                latency = 85.0;
+            } else if (symptom.includes('latensi') || symptom.includes('drop')) {
+                latency = 220.0;
+                loss = 8.5;
+            }
+
+            // Jika laporan massal (clustered), tandai AP sebagai OVERLOADED
+            const opStatus = isClustered ? 'OVERLOADED' : 'ONLINE';
+            db.prepare(`UPDATE access_point SET status_operasional = ? WHERE ap_mac = ?`).run(opStatus, apMac);
+
+            db.prepare(`
+                INSERT INTO log_telemetri_ap (
+                    ap_mac, connected_clients, clients_24ghz, clients_5ghz,
+                    cpu_utilization, memory_utilization, packet_loss_ratio,
+                    latency_gateway_ms, dhcp_pool_remaining
+                ) VALUES (?, ?, ?, ?, ?, 35.0, ?, ?, ?)
+            `).run(apMac, newClients, clients24, clients5, cpu, loss, latency, pool);
+        } catch (e) {
+            console.warn('[TELEMETRY UPDATE ERROR]', e);
+        }
+    }
+
     return getTicketById(noTiket);
 }
 
