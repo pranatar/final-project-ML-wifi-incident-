@@ -118,7 +118,7 @@
           <button onclick="switchScreen('student')" id="tab-student" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2">
             <i class="fa-solid fa-mobile-screen"></i> 1. Portal Mahasiswa
           </button>
-          <button onclick="switchScreen('noc')" id="tab-noc" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+          <button onclick="switchScreen('noc')" id="tab-noc" class="hidden px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
             <i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC
           </button>
           <button onclick="switchScreen('certificate')" id="tab-certificate" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
@@ -892,19 +892,30 @@
       document.getElementById('user-nama-display').innerText = currentUser.nama;
 
       const roleBadge = document.getElementById('user-role-badge');
+      const tabNoc = document.getElementById('tab-noc');
+      const tabStudent = document.getElementById('tab-student');
+      const tabCert = document.getElementById('tab-certificate');
+      const btnApprove = document.getElementById('btn-approve-cert');
       const isIT = currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT';
 
       if (isIT) {
         roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-600 text-white';
         roleBadge.innerText = 'TIM IT NOC';
-        // IT melihat semua tab
-        document.getElementById('tab-noc').classList.remove('hidden');
+        // IT melihat semua tab termasuk Dashboard NOC
+        tabNoc.classList.remove('hidden');
+        tabStudent.innerHTML = '<i class="fa-solid fa-mobile-screen"></i> 1. Form Mahasiswa';
+        tabNoc.innerHTML = '<i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC';
+        tabCert.innerHTML = '<i class="fa-solid fa-file-contract"></i> 3. Surat Bukti & Approval';
+        if (btnApprove) btnApprove.classList.remove('hidden');
         switchScreen('noc');
       } else {
         roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white';
         roleBadge.innerText = 'MAHASISWA';
-        // Mahasiswa TIDAK boleh melihat Dashboard NOC (Security Rule)
-        document.getElementById('tab-noc').classList.add('hidden');
+        // Mahasiswa TIDAK boleh melihat Dashboard NOC (Security Rule & Permintaan Pengguna)
+        tabNoc.classList.add('hidden');
+        tabStudent.innerHTML = '<i class="fa-solid fa-mobile-screen"></i> 1. Form Lapor Masalah';
+        tabCert.innerHTML = '<i class="fa-solid fa-file-contract"></i> 2. Surat Bukti Resmi (PDF)';
+        if (btnApprove) btnApprove.classList.add('hidden');
         
         // Isi otomatis form pelaporan dengan data diri mahasiswa login
         const nimInput = document.getElementById('stu-nim');
@@ -935,6 +946,8 @@
         }
       }
 
+      const isIT = currentUser && (currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT');
+
       try {
         const res = await fetch(`${API_BASE}/api/health`);
         if (res.ok) {
@@ -944,8 +957,10 @@
           badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live Backend Active';
           
           await loadRoomsDropdown();
-          await loadNocDashboard();
-          startLivePolling();
+          if (isIT) {
+            await loadNocDashboard();
+            startLivePolling();
+          }
         }
       } catch (e) {
         console.log('[API] Menjalankan mode standalone/offline.');
@@ -963,24 +978,41 @@
 
     // 2. Navigasi Antar-Layar
     function switchScreen(screen) {
+      const isIT = currentUser && (currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT');
+      
+      // Keamanan: Mahasiswa dilarang keras membuka screen NOC
+      if (screen === 'noc' && !isIT) {
+        screen = 'student';
+      }
+
       document.getElementById('screen-student').classList.add('hidden');
       document.getElementById('screen-noc').classList.add('hidden');
       document.getElementById('screen-certificate').classList.add('hidden');
 
-      document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
-      document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
-      document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      const tabStudent = document.getElementById('tab-student');
+      const tabNoc = document.getElementById('tab-noc');
+      const tabCert = document.getElementById('tab-certificate');
+
+      tabStudent.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      tabCert.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+
+      if (isIT) {
+        tabNoc.classList.remove('hidden');
+        tabNoc.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2';
+      } else {
+        tabNoc.classList.add('hidden');
+      }
 
       if (screen === 'student') {
         document.getElementById('screen-student').classList.remove('hidden');
-        document.getElementById('tab-student').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
-      } else if (screen === 'noc') {
+        tabStudent.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+      } else if (screen === 'noc' && isIT) {
         document.getElementById('screen-noc').classList.remove('hidden');
-        document.getElementById('tab-noc').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+        tabNoc.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white shadow-sm transition flex items-center gap-2';
         loadNocDashboard();
       } else if (screen === 'certificate') {
         document.getElementById('screen-certificate').classList.remove('hidden');
-        document.getElementById('tab-certificate').className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
+        tabCert.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2';
         populateCertificateDropdown();
       }
     }
@@ -1099,6 +1131,8 @@
     // 5. Muat Data Dashboard NOC (/api/stats, /api/tickets, /api/access-points)
     async function loadNocDashboard() {
       if (!isApiConnected) return;
+      const isIT = currentUser && (currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT');
+      if (!isIT) return; // Security: Mahasiswa dilarang memuat data NOC
 
       try {
         // A. Ambil Statistik Ringkasan
