@@ -218,14 +218,41 @@
     <!-- SCREEN 1: PORTAL MAHASISWA (MOBILE MOCKUP) -->
     <!-- ========================================== -->
     <section id="screen-student" class="space-y-6">
-      <div class="text-center max-w-xl mx-auto">
-        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 border border-blue-200">
-          Tampilan Antarmuka Mahasiswa (End-User)
-        </span>
-        <h2 class="text-2xl font-bold text-slate-900 mt-2">Portal Pelaporan Darurat Wi-Fi</h2>
-        <p class="text-sm text-slate-500 mt-1">
-          Formulir pelaporan gangguan saat mengerjakan tugas daring berbatas waktu. Terhubung ke sistem korelasi otomatis.
-        </p>
+      <!-- Onboarding Guide Card: Panduan 3 Langkah Cepat Mahasiswa -->
+      <div class="max-w-2xl mx-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 rounded-3xl p-6 text-white shadow-xl shadow-blue-500/15 border border-white/20">
+        <div class="flex items-center gap-2.5 mb-2">
+          <span class="px-3 py-0.5 rounded-full bg-white/20 backdrop-blur-md text-xs font-black uppercase tracking-wider text-blue-100 border border-white/20">
+            <i class="fa-solid fa-compass text-amber-300 mr-1"></i> Panduan Cepat Mahasiswa
+          </span>
+          <span class="text-xs text-blue-200">Apa yang harus Anda lakukan saat Wi-Fi putus?</span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-black tracking-tight">Koneksi Putus Saat Tugas Daring? Ikuti 3 Langkah:</h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-4">
+          <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/15">
+            <div class="w-7 h-7 rounded-xl bg-amber-400 text-slate-900 font-black flex items-center justify-center text-xs mb-2 shadow">
+              1
+            </div>
+            <h4 class="text-xs font-bold text-white">Isi Formulir &amp; Lokasi</h4>
+            <p class="text-[11px] text-blue-100/80 mt-1 leading-snug">Pilih ruangan tempat Anda mengalami gangguan agar teknisi tepat sasaran.</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/15">
+            <div class="w-7 h-7 rounded-xl bg-blue-300 text-slate-900 font-black flex items-center justify-center text-xs mb-2 shadow">
+              2
+            </div>
+            <h4 class="text-xs font-bold text-white">Kirim Laporan Darurat</h4>
+            <p class="text-[11px] text-blue-100/80 mt-1 leading-snug">Klik tombol kirim. Tiket otomatis masuk ke antrean radar NOC Tim IT.</p>
+          </div>
+
+          <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-white/15">
+            <div class="w-7 h-7 rounded-xl bg-emerald-400 text-slate-900 font-black flex items-center justify-center text-xs mb-2 shadow">
+              3
+            </div>
+            <h4 class="text-xs font-bold text-white">Unduh Surat Dispensasi</h4>
+            <p class="text-[11px] text-blue-100/80 mt-1 leading-snug">Setelah IT menangani, cetak surat resmi ber-QR Code untuk dosen pengampu.</p>
+          </div>
+        </div>
       </div>
 
       <!-- Phone Frame Container with Floating Glow -->
@@ -589,17 +616,33 @@
         </div>
 
         <!-- Right Column: Clustered Ticket Queue (1 Col) -->
-        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm space-y-3.5 flex flex-col">
+        <div class="bg-white border border-slate-200/90 rounded-2xl p-5 shadow-sm space-y-3.5 flex flex-col">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <div>
-              <h3 class="text-base font-bold text-slate-900">Antrean Tiket Masuk</h3>
-              <p class="text-xs text-slate-400">Klik tiket untuk aksi & detail</p>
+              <div class="flex items-center gap-1.5">
+                <h3 class="text-base font-black text-slate-900">Antrean Tiket Masuk</h3>
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+              </div>
+              <p class="text-xs text-slate-400">Klik tiket mahasiswa di bawah untuk melihat rincian &amp; eksekusi</p>
             </div>
-            <span id="noc-tickets-count-badge" class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">0 Tiket</span>
+            <span id="noc-tickets-count-badge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-mono font-bold">0 Tiket</span>
+          </div>
+
+          <!-- Petunjuk Alur Kerja IT Saat Tiket Masuk -->
+          <div class="bg-indigo-50/70 border border-indigo-200/70 rounded-xl p-3 text-[11px] text-indigo-900 leading-relaxed">
+            <div class="font-bold flex items-center gap-1.5 text-indigo-800 mb-1">
+              <i class="fa-solid fa-lightbulb text-amber-500"></i> SOP Petugas IT saat Ada Laporan Masuk:
+            </div>
+            <ol class="list-decimal list-inside space-y-0.5 text-indigo-950 font-medium pl-0.5">
+              <li><b>Klik kartu tiket</b> mahasiswa yang masuk di daftar.</li>
+              <li>Periksa <b>ruangan &amp; AP terkait</b> di peta utilisasi sebelah kiri.</li>
+              <li>Gunakan <b>Panel Perintah Cepat</b> (Band Steering / Flush DHCP) atau tombol <b>Auto-Remediasi AP</b>.</li>
+              <li>Klik <b>"Tandai Resolved"</b> $\to$ Sistem akan otomatis membuatkan Surat Dispensasi resmi untuk mahasiswa!</li>
+            </ol>
           </div>
 
           <!-- Ticket Items Container (Dinamis dari /api/tickets) -->
-          <div id="noc-tickets-container" class="space-y-2.5 max-h-[460px] overflow-y-auto custom-scroll pr-1 flex-1">
+          <div id="noc-tickets-container" class="space-y-2.5 max-h-[420px] overflow-y-auto custom-scroll pr-1 flex-1">
             <!-- Loading placeholder -->
             <div class="p-3 text-center text-xs text-slate-400">Memuat tiket...</div>
           </div>
@@ -879,16 +922,19 @@
         </div>
       </div>
 
-      <div class="border-t border-slate-100 pt-3 flex flex-wrap gap-2 justify-end">
-        <button onclick="actionResolveCurrentTicket()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1">
-          <i class="fa-solid fa-check"></i> Tandai Resolved
-        </button>
-        <button onclick="actionCreateCertificateForModal()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition flex items-center gap-1">
-          <i class="fa-solid fa-file-contract"></i> Buat Surat Resmi
-        </button>
-        <button onclick="closeTicketModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition">
-          Tutup
-        </button>
+      <div class="border-t border-slate-100 pt-3 flex flex-wrap gap-2 justify-between items-center">
+        <span class="text-[11px] text-slate-400"><i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Klik "Tandai Resolved" untuk otomatis menerbitkan surat</span>
+        <div class="flex gap-2">
+          <button onclick="actionResolveCurrentTicket()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white text-xs font-bold shadow-md transition flex items-center gap-1.5 active:scale-95">
+            <i class="fa-solid fa-check"></i> Tandai Selesai (Auto-Terbitkan Surat)
+          </button>
+          <button onclick="actionCreateCertificateForModal()" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-md transition flex items-center gap-1.5 active:scale-95">
+            <i class="fa-solid fa-file-contract"></i> Buka Lembar Surat
+          </button>
+          <button onclick="closeTicketModal()" class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold transition">
+            Tutup
+          </button>
+        </div>
       </div>
     </div>
   </div>
