@@ -47,6 +47,10 @@ function getTickets(filter = {}) {
         query += ` AND t.id_ruangan = ?`;
         params.push(filter.id_ruangan);
     }
+    if (filter.userId) {
+        query += ` AND t.user_id = ?`;
+        params.push(filter.userId);
+    }
     if (filter.search) {
         query += ` AND (t.no_tiket LIKE ? OR p.nama LIKE ? OR t.mata_kuliah LIKE ?)`;
         const q = `%${filter.search}%`;

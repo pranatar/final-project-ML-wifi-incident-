@@ -97,6 +97,14 @@ function executeRemediation({ apMac, operatorId, actionType = 'DYNAMIC_LOAD_BALA
             INSERT INTO tindakan_penanganan (no_tiket, operator_id, aksi_teknis, catatan_teknis, hasil_ping_ms)
             VALUES (?, ?, 'NOC Network Remediation', ?, ?)
         `).run(t.no_tiket, opId, actionSummary, newLatency);
+
+        // Terbitkan surat dispensasi resmi secara otomatis jika belum ada
+        try {
+            const dispensationService = require('./dispensationService');
+            dispensationService.createDispensation({ noTiket: t.no_tiket });
+        } catch (e) {
+            // Surat sudah ada atau ditangani terpisah
+        }
     }
 
     return {

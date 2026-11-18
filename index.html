@@ -21,6 +21,70 @@
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
 
+  <!-- =========================================== -->
+  <!-- LAYAR LOGIN (muncul jika belum login)        -->
+  <!-- =========================================== -->
+  <div id="login-screen" class="fixed inset-0 z-[999] bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 flex items-center justify-center p-4">
+    <div class="w-full max-w-sm bg-white rounded-2xl shadow-2xl overflow-hidden">
+      <!-- Header Login -->
+      <div class="bg-blue-700 px-6 py-5 text-white text-center">
+        <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center mx-auto mb-3">
+          <i class="fa-solid fa-wifi text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-bold">Sistem Wi-Fi UPT TIK</h2>
+        <p class="text-xs text-blue-200 mt-0.5">Kampus – Portal Insiden Jaringan</p>
+      </div>
+
+      <!-- Tab Peran -->
+      <div class="flex border-b border-slate-200">
+        <button id="login-tab-student" onclick="switchLoginTab('student')"
+          class="flex-1 py-3 text-xs font-bold text-blue-700 border-b-2 border-blue-600 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-graduation-cap"></i> Saya Mahasiswa
+        </button>
+        <button id="login-tab-it" onclick="switchLoginTab('it')"
+          class="flex-1 py-3 text-xs font-bold text-slate-400 border-b-2 border-transparent flex items-center justify-center gap-2">
+          <i class="fa-solid fa-server"></i> Tim IT Kampus
+        </button>
+      </div>
+
+      <!-- Form Mahasiswa -->
+      <div id="login-form-student" class="p-6 space-y-4">
+        <p class="text-xs text-slate-500">Masukkan identitas Anda. Tiket hanya bisa dilihat oleh Anda sendiri.</p>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">NIM (Nomor Induk Mahasiswa)</label>
+          <input type="text" id="login-nim" placeholder="Contoh: 220101089"
+            class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap</label>
+          <input type="text" id="login-nama" placeholder="Nama sesuai KTM"
+            class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <button onclick="doLogin('student')"
+          class="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-right-to-bracket"></i> Masuk sebagai Mahasiswa
+        </button>
+        <p id="login-err-student" class="text-xs text-rose-600 text-center hidden"></p>
+      </div>
+
+      <!-- Form IT -->
+      <div id="login-form-it" class="p-6 space-y-4 hidden">
+        <p class="text-xs text-slate-500">Masukkan password Tim IT / NOC untuk mengakses dashboard pengelolaan.</p>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Password Tim IT</label>
+          <input type="password" id="login-it-pass" placeholder="Password IT NOC"
+            class="w-full text-sm px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none"
+            onkeydown="if(event.key==='Enter') doLogin('it')">
+        </div>
+        <button onclick="doLogin('it')"
+          class="w-full py-2.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-bold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-shield-halved"></i> Masuk sebagai Tim IT
+        </button>
+        <p id="login-err-it" class="text-xs text-rose-600 text-center hidden"></p>
+      </div>
+    </div>
+  </div>
+
   <!-- TOP APP NAVIGATION BAR (NO-PRINT) -->
   <header class="no-print bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -39,18 +103,29 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
-        <button onclick="switchScreen('student')" id="tab-student" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2">
-          <i class="fa-solid fa-mobile-screen"></i> 1. Portal Mahasiswa
-        </button>
-        <button onclick="switchScreen('noc')" id="tab-noc" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
-          <i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC
-        </button>
-        <button onclick="switchScreen('certificate')" id="tab-certificate" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
-          <i class="fa-solid fa-file-contract"></i> 3. Surat Bukti Resmi (PDF)
-        </button>
-      </nav>
+      <div class="flex items-center gap-3">
+        <!-- Info User yang Login -->
+        <div id="user-info-bar" class="hidden items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
+          <div id="user-role-badge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white">-</div>
+          <span id="user-nama-display" class="text-xs text-slate-200 font-semibold max-w-[120px] truncate">-</span>
+          <button onclick="doLogout()" class="text-slate-400 hover:text-rose-400 transition ml-1" title="Keluar">
+            <i class="fa-solid fa-right-from-bracket text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+          <button onclick="switchScreen('student')" id="tab-student" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-sm transition flex items-center gap-2">
+            <i class="fa-solid fa-mobile-screen"></i> 1. Portal Mahasiswa
+          </button>
+          <button onclick="switchScreen('noc')" id="tab-noc" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+            <i class="fa-solid fa-gauge-high"></i> 2. Dashboard NOC
+          </button>
+          <button onclick="switchScreen('certificate')" id="tab-certificate" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white transition flex items-center gap-2">
+            <i class="fa-solid fa-file-contract"></i> 3. Surat Bukti Resmi (PDF)
+          </button>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -703,9 +778,163 @@
     let currentActiveTicket = null;
     let allTicketsCache = [];
     let selectedModalTicketId = null;
+    let currentUser = null; // { userId, nama, email, peran }
+
+    // ==========================================
+    // SISTEM LOGIN & ROLE SEGREGATION
+    // ==========================================
+    let currentLoginTab = 'student';
+
+    function switchLoginTab(role) {
+      currentLoginTab = role;
+      const tabStudent = document.getElementById('login-tab-student');
+      const tabIt = document.getElementById('login-tab-it');
+      const formStudent = document.getElementById('login-form-student');
+      const formIt = document.getElementById('login-form-it');
+      const errStudent = document.getElementById('login-err-student');
+      const errIt = document.getElementById('login-err-it');
+
+      errStudent.classList.add('hidden');
+      errIt.classList.add('hidden');
+
+      if (role === 'student') {
+        tabStudent.className = 'flex-1 py-3 text-xs font-bold text-blue-700 border-b-2 border-blue-600 flex items-center justify-center gap-2';
+        tabIt.className = 'flex-1 py-3 text-xs font-bold text-slate-400 border-b-2 border-transparent flex items-center justify-center gap-2';
+        formStudent.classList.remove('hidden');
+        formIt.classList.add('hidden');
+      } else {
+        tabIt.className = 'flex-1 py-3 text-xs font-bold text-indigo-700 border-b-2 border-indigo-600 flex items-center justify-center gap-2';
+        tabStudent.className = 'flex-1 py-3 text-xs font-bold text-slate-400 border-b-2 border-transparent flex items-center justify-center gap-2';
+        formIt.classList.remove('hidden');
+        formStudent.classList.add('hidden');
+      }
+    }
+
+    async function doLogin(role) {
+      const errEl = role === 'student' ? document.getElementById('login-err-student') : document.getElementById('login-err-it');
+      errEl.classList.add('hidden');
+
+      let payload = {};
+      if (role === 'student') {
+        const nim = document.getElementById('login-nim').value.trim();
+        const nama = document.getElementById('login-nama').value.trim();
+        if (!nim) {
+          errEl.innerText = 'Mohon masukkan NIM Anda!';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        payload = { role: 'Mahasiswa', userId: nim, nama: nama || `Mahasiswa (${nim})` };
+      } else {
+        const pass = document.getElementById('login-it-pass').value;
+        if (!pass) {
+          errEl.innerText = 'Mohon masukkan password Tim IT!';
+          errEl.classList.remove('hidden');
+          return;
+        }
+        payload = { role: 'IT', password: pass };
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success && json.user) {
+          currentUser = json.user;
+          localStorage.setItem('wifi_user', JSON.stringify(currentUser));
+          applyUserSession();
+          showToast(`Selamat datang, ${currentUser.nama}!`);
+        } else {
+          errEl.innerText = json.error || 'Login gagal. Silakan coba lagi.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (e) {
+        // Fallback offline login
+        if (role === 'student') {
+          const nim = document.getElementById('login-nim').value.trim() || '220101089';
+          const nama = document.getElementById('login-nama').value.trim() || 'Mahasiswa ' + nim;
+          currentUser = { userId: nim, nama: nama, peran: 'Mahasiswa' };
+        } else {
+          const pass = document.getElementById('login-it-pass').value;
+          if (pass === 'admin123' || pass === 'it2026') {
+            currentUser = { userId: 'NOC-002', nama: 'Rian Pratama, S.Kom. (IT NOC)', peran: 'Network_NOC_L2' };
+          } else {
+            errEl.innerText = 'Password Tim IT salah! (Default: admin123)';
+            errEl.classList.remove('hidden');
+            return;
+          }
+        }
+        localStorage.setItem('wifi_user', JSON.stringify(currentUser));
+        applyUserSession();
+      }
+    }
+
+    function doLogout() {
+      localStorage.removeItem('wifi_user');
+      currentUser = null;
+      document.getElementById('login-screen').classList.remove('hidden');
+      document.getElementById('user-info-bar').classList.add('hidden');
+      document.getElementById('user-info-bar').classList.remove('flex');
+    }
+
+    function applyUserSession() {
+      if (!currentUser) return;
+
+      // Sembunyikan layar login
+      document.getElementById('login-screen').classList.add('hidden');
+
+      // Tampilkan info user di header
+      const infoBar = document.getElementById('user-info-bar');
+      infoBar.classList.remove('hidden');
+      infoBar.classList.add('flex');
+      document.getElementById('user-nama-display').innerText = currentUser.nama;
+
+      const roleBadge = document.getElementById('user-role-badge');
+      const isIT = currentUser.peran === 'Network_NOC_L2' || currentUser.peran === 'Helpdesk_L1' || currentUser.peran === 'IT';
+
+      if (isIT) {
+        roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-600 text-white';
+        roleBadge.innerText = 'TIM IT NOC';
+        // IT melihat semua tab
+        document.getElementById('tab-noc').classList.remove('hidden');
+        switchScreen('noc');
+      } else {
+        roleBadge.className = 'px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white';
+        roleBadge.innerText = 'MAHASISWA';
+        // Mahasiswa TIDAK boleh melihat Dashboard NOC (Security Rule)
+        document.getElementById('tab-noc').classList.add('hidden');
+        
+        // Isi otomatis form pelaporan dengan data diri mahasiswa login
+        const nimInput = document.getElementById('stu-nim');
+        const nameInput = document.getElementById('stu-name');
+        if (nimInput) {
+          nimInput.value = currentUser.userId;
+          nimInput.readOnly = true;
+          nimInput.classList.add('bg-slate-100', 'text-slate-600');
+        }
+        if (nameInput) {
+          nameInput.value = currentUser.nama;
+          nameInput.readOnly = true;
+          nameInput.classList.add('bg-slate-100', 'text-slate-600');
+        }
+        switchScreen('student');
+      }
+    }
 
     // 1. Inisialisasi & Cek Koneksi Server
     async function initApp() {
+      // Cek session tersimpan
+      const saved = localStorage.getItem('wifi_user');
+      if (saved) {
+        try {
+          currentUser = JSON.parse(saved);
+        } catch (e) {
+          currentUser = null;
+        }
+      }
+
       try {
         const res = await fetch(`${API_BASE}/api/health`);
         if (res.ok) {
@@ -723,6 +952,12 @@
         const badge = document.getElementById('backend-status-badge');
         badge.className = 'px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-500/20 text-slate-300 border border-slate-500/30 flex items-center gap-1';
         badge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Mode Standalone';
+      }
+
+      if (currentUser) {
+        applyUserSession();
+      } else {
+        document.getElementById('login-screen').classList.remove('hidden');
       }
     }
 
@@ -1154,21 +1389,38 @@
     }
 
     // 8. Logika Surat Keterangan Resmi (Screen 3)
-    function populateCertificateDropdown() {
+    async function populateCertificateDropdown() {
       const select = document.getElementById('cert-ticket-select');
       select.innerHTML = '';
-      if (!allTicketsCache.length) {
-        select.innerHTML = '<option>Tidak ada tiket</option>';
+      
+      let ticketsToShow = allTicketsCache;
+      // Jika yang login Mahasiswa, hanya tampilkan tiket miliknya sendiri!
+      if (currentUser && currentUser.peran === 'Mahasiswa') {
+        ticketsToShow = allTicketsCache.filter(t => String(t.user_id) === String(currentUser.userId));
+        // Jika cache kosong/belum terisi, fetch langsung dari API /api/tickets/my
+        if (!ticketsToShow.length) {
+          try {
+            const res = await fetch(`${API_BASE}/api/tickets/my?userId=${encodeURIComponent(currentUser.userId)}`);
+            const json = await res.json();
+            if (json.success && json.data) {
+              ticketsToShow = json.data;
+            }
+          } catch(e) {}
+        }
+      }
+
+      if (!ticketsToShow.length) {
+        select.innerHTML = '<option value="">Belum ada tiket yang diajukan</option>';
         return;
       }
-      allTicketsCache.forEach(t => {
+      ticketsToShow.forEach(t => {
         const opt = document.createElement('option');
         opt.value = t.no_tiket;
-        opt.innerText = `${t.no_tiket} - ${t.nama_pelapor}`;
+        opt.innerText = `${t.no_tiket} - ${t.nama_pelapor || t.user_id} (${t.status_tiket})`;
         select.appendChild(opt);
       });
-      if (allTicketsCache[0]) {
-        loadCertificateForSelectedTicket(allTicketsCache[0].no_tiket);
+      if (ticketsToShow[0]) {
+        loadCertificateForSelectedTicket(ticketsToShow[0].no_tiket);
       }
     }
 

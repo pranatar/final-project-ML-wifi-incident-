@@ -60,6 +60,54 @@ async function handleApiRequest(req, res) {
             });
         }
 
+        // 1.B Autentikasi Pengguna & Role Segregation (Mahasiswa vs IT Kampus)
+        if (pathname === '/api/auth/login' && method === 'POST') {
+            const body = await parseBody();
+            const { role, userId, nama, password } = body;
+
+            if (role === 'IT' || role === 'Network_NOC_L2') {
+                if (password !== 'admin123' && password !== 'it2026') {
+                    return sendJson(401, { success: false, error: 'Password Tim IT salah! Gunakan: admin123' });
+                }
+                return sendJson(200, {
+                    success: true,
+                    message: 'Login Tim IT Berhasil',
+                    user: {
+                        userId: userId || 'NOC-002',
+                        nama: 'Rian Pratama, S.Kom. (IT NOC)',
+                        email: 'rian.noc@univ.ac.id',
+                        peran: 'Network_NOC_L2'
+                    }
+                });
+            } else {
+                if (!userId) {
+                    return sendJson(400, { success: false, error: 'NIM Mahasiswa wajib diisi!' });
+                }
+                const cleanNim = String(userId).trim();
+                const studentName = nama && nama.trim() ? nama.trim() : `Mahasiswa (${cleanNim})`;
+                return sendJson(200, {
+                    success: true,
+                    message: 'Login Mahasiswa Berhasil',
+                    user: {
+                        userId: cleanNim,
+                        nama: studentName,
+                        email: `${cleanNim}@student.univ.ac.id`,
+                        peran: 'Mahasiswa'
+                    }
+                });
+            }
+        }
+
+        // 1.C Tiket Khusus Mahasiswa yang sedang login (Security Rule: Mahasiswa hanya melihat tiketnya sendiri)
+        if (pathname === '/api/tickets/my' && method === 'GET') {
+            const userId = query.userId;
+            if (!userId) {
+                return sendJson(400, { success: false, error: 'Query parameter userId wajib disertakan' });
+            }
+            const myTickets = ticketService.getTickets({ userId });
+            return sendJson(200, { success: true, count: myTickets.length, data: myTickets });
+        }
+
         // 2. Ruangan (Master Data)
         if (pathname === '/api/rooms' && method === 'GET') {
             const rooms = ticketService.getRooms();
